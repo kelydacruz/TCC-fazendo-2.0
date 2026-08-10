@@ -1,0 +1,1 @@
+{"name":"acervotcc","version":"1.0.0","description":"Acervo institucional de Trabalhos de Conclusão de Curso","type":"module","main":"index.js","scripts":{"start":"node index.js","dev":"node --watch index.js","test":"node --test"},"dependencies":{"ejs":"^3.1.10","express":"^4.21.2"},"engines":{"node":">=18"}}

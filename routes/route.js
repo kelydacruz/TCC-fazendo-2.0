@@ -1,0 +1,11 @@
+import express from 'express';
+import SiteController from '../controllers/SiteController.js';
+const router = express.Router();
+const site = new SiteController();
+router.get('/', site.home);
+router.get('/tccs', site.catalogo);
+router.get('/tccs/:id', site.detalhes);
+router.get('/aprender', site.aprender);
+router.get('/ideias', site.bancoIdeias);
+router.get('/painel', site.painel);
+export default router;

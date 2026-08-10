@@ -1,0 +1,13 @@
+import express from 'express';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import routes from './routes/route.js';
+const app = express();
+const root = dirname(fileURLToPath(import.meta.url));
+app.set('view engine','ejs');
+app.set('views',join(root,'views'));
+app.use(express.urlencoded({extended:true}));
+app.use('/public',express.static(join(root,'public')));
+app.use(routes);
+app.use((req,res) => res.status(404).render('404',{title:'Página não encontrada'}));
+export default app;
