@@ -1,29 +1,22 @@
-import { cursos, ideias, modulos, tccs } from '../data/mock.js';
-
-const normalize = value => String(value || '').toLocaleLowerCase('pt-BR');
+import Tcc from '../models/tcc.js';
+import Curso from '../models/curso.js';
+import Ideia from '../models/ideia.js';
+import Configuracao from '../models/configuracao.js';
+import { bancoDisponivel } from '../config/conexao.js';
+import { cursos, tccs } from '../data/mock.js';
 
 export default class SiteController {
-  home(req, res) { res.render('home', { title:'Início', tccs, cursos }); }
-
-  catalogo(req, res) {
-    const { q='', curso='', ano='', area='', orientador='', ordem='recentes' } = req.query;
-    let resultado = tccs.filter(t => {
-      const texto = normalize([t.titulo,t.resumo,t.autores.join(' '),t.orientador,t.palavras.join(' ')].join(' '));
-      return (!q || texto.includes(normalize(q))) && (!curso || t.curso === curso) && (!ano || String(t.ano) === ano) && (!area || t.area === area) && (!orientador || t.orientador === orientador);
-    });
-    if (ordem === 'az') resultado.sort((a,b) => a.titulo.localeCompare(b.titulo));
-    if (ordem === 'visualizados') resultado.sort((a,b) => b.views-a.views);
-    res.render('catalogo', { title:'Acervo de TCCs', resultado, tccs, cursos, query:req.query });
-  }
-
-  detalhes(req, res) {
-    const tcc = tccs.find(item => item.id === req.params.id);
-    if (!tcc) return res.status(404).render('404', { title:'Trabalho não encontrado' });
-    const relacionados = tccs.filter(item => item.id !== tcc.id && (item.curso === tcc.curso || item.area === tcc.area)).slice(0,3);
-    res.render('detalhes', { title:tcc.titulo, tcc, relacionados });
-  }
-
-  aprender(req, res) { res.render('aprender', { title:'Aprenda a fazer seu TCC', modulos }); }
-  bancoIdeias(req, res) { res.render('ideias', { title:'Banco de Ideias', ideias, cursos }); }
-  painel(req, res) { res.render('painel', { title:'Meu painel', tccs, ideias }); }
+  home = async(req, res) => {
+    if (!bancoDisponivel()) return res.render('home', { title:'Início', tccs, cursos });
+    const [recentes,maisAcessados,cursosDb,totalTcc,totalViews,totalDownloads,totalIdeias] = await Promise.all([
+      Tcc.find({status:'Publicado'}).select('-pdf.dados -capa.dados').populate('curso orientador').sort({publicadoEm:-1}).limit(3),
+      Tcc.find({status:'Publicado'}).select('-pdf.dados -capa.dados').populate('curso orientador').sort({visualizacoes:-1}).limit(3),
+      Curso.find({ativo:true}), Tcc.countDocuments({status:'Publicado'}),
+      Tcc.aggregate([{$match:{status:'Publicado'}},{$group:{_id:null,total:{$sum:'$visualizacoes'}}}]),
+      Tcc.aggregate([{$match:{status:'Publicado'}},{$group:{_id:null,total:{$sum:'$downloads'}}}]), Ideia.countDocuments({status:{$ne:'Arquivada'}})
+    ]);
+    res.render('home-db',{title:'Início',recentes,maisAcessados,cursos:cursosDb,stats:{tccs:totalTcc,views:totalViews[0]?.total||0,downloads:totalDownloads[0]?.total||0,ideias:totalIdeias}});
+  };
+  sobre = async(req,res)=>{const config=bancoDisponivel()?await Configuracao.findOne({chave:'geral'}):null;res.render('institucional/sobre',{title:'Sobre a plataforma',config});};
+  privacidade = async(req,res)=>{const config=bancoDisponivel()?await Configuracao.findOne({chave:'geral'}):null;res.render('institucional/privacidade',{title:'Política de privacidade',config});};
 }
