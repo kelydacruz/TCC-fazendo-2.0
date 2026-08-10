@@ -13,9 +13,14 @@ import PainelRoutes from './routes/PainelRoutes.js';
 import AdminRoutes from './routes/AdminRoutes.js';
 import { csrf } from './middlewares/csrf.js';
 import { naoEncontrado, tratarErro } from './middlewares/erros.js';
+import { dominiosInstitucionais, loginRapidoAtivo } from './config/dominios.js';
 const app = express();
 const root = dirname(fileURLToPath(import.meta.url));
-if (process.env.NODE_ENV === 'production' && !process.env.SESSION_SECRET) throw new Error('SESSION_SECRET é obrigatória em produção.');
+if (process.env.NODE_ENV === 'production') {
+  if (!process.env.SESSION_SECRET) throw new Error('SESSION_SECRET é obrigatória em produção.');
+  const dominios = dominiosInstitucionais();
+  if (!dominios.aluno.length || !dominios.professor.length) throw new Error('Configure ALUNO_EMAIL_DOMAINS e PROFESSOR_EMAIL_DOMAINS em produção.');
+}
 app.set('view engine','ejs');
 app.set('views',join(root,'views'));
 app.set('trust proxy', 1);
@@ -35,6 +40,8 @@ app.use((req,res,next)=>{
   res.locals.mensagens=req.session.mensagens||[];
   delete req.session.mensagens;
   res.locals.caminhoAtual=req.path;
+  res.locals.devQuickLogin=loginRapidoAtivo();
+  res.locals.dominiosEmail=dominiosInstitucionais();
   next();
 });
 app.use(csrf);

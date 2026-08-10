@@ -3,6 +3,8 @@ import crypto from 'crypto';
 import Usuario from '../models/usuario.js';
 import { enviarEmail } from '../config/email.js';
 import Configuracao from '../models/configuracao.js';
+import { emailDeTeste, loginRapidoAtivo, perfilDoEmail } from '../config/dominios.js';
+import { bancoDisponivel } from '../config/conexao.js';
 
 export default class AuthController {
   openLogin(req, res) { res.render('auth/entrar', { title: 'Entrar' }); }
@@ -12,10 +14,11 @@ export default class AuthController {
   async cadastrar(req, res) {
     const config = await Configuracao.findOne({ chave:'geral' });
     if (config && !config.permitirCadastro) throw new Error('Novos cadastros estão temporariamente suspensos.');
-    const { nome, email, senha, confirmarSenha, perfil } = req.body;
+    const { nome, email, senha, confirmarSenha } = req.body;
     if (!nome || !email || !senha || senha.length < 8) throw new Error('Preencha os dados e use uma senha com pelo menos 8 caracteres.');
     if (senha !== confirmarSenha) throw new Error('As senhas não coincidem.');
-    if (!['aluno', 'professor'].includes(perfil)) throw new Error('Perfil inválido.');
+    const perfil = perfilDoEmail(email);
+    if (!perfil) throw new Error('Use um e-mail institucional de aluno ou professor autorizado.');
     if (await Usuario.exists({ email: email.toLowerCase() })) throw new Error('Este e-mail já está cadastrado.');
     const tokenEmail = crypto.randomBytes(24).toString('hex');
     const usuario = await Usuario.create({ nome, email, senha: await bcrypt.hash(senha, 12), perfil, tokenEmail });
@@ -25,9 +28,28 @@ export default class AuthController {
     return res.redirect('/entrar');
   }
 
+  async entrarDesenvolvimento(req, res) {
+    if (!loginRapidoAtivo()) return res.status(404).render('404', { title:'Página não encontrada' });
+    if (!bancoDisponivel()) throw new Error('Configure MONGODB_URI para usar as contas rápidas de teste.');
+    const perfil = req.params.perfil;
+    if (!['aluno','professor'].includes(perfil)) return res.status(404).render('404', { title:'Página não encontrada' });
+    const email = emailDeTeste(perfil);
+    const usuario = await Usuario.findOneAndUpdate(
+      { email },
+      { $set:{ nome:perfil === 'aluno' ? 'Aluno de Teste' : 'Professor de Teste', perfil, aprovado:true, emailConfirmado:true, ativo:true }, $setOnInsert:{ senha:await bcrypt.hash(crypto.randomBytes(32).toString('hex'),12) } },
+      { upsert:true, new:true, runValidators:true }
+    );
+    return req.session.regenerate(erro => {
+      if (erro) return res.redirect('/entrar');
+      req.session.usuario = { id:usuario.id, nome:usuario.nome, email:usuario.email, perfil:usuario.perfil };
+      req.session.save(() => res.redirect('/painel'));
+    });
+  }
+
   async entrar(req, res) {
     const usuario = await Usuario.findOne({ email: String(req.body.email).toLowerCase() }).select('+senha');
     if (!usuario || !await bcrypt.compare(req.body.senha || '', usuario.senha)) throw new Error('E-mail ou senha inválidos.');
+    if (usuario.perfil !== 'administrador' && perfilDoEmail(usuario.email) !== usuario.perfil) throw new Error('Este e-mail não pertence mais a um domínio institucional autorizado.');
     if (!usuario.ativo) throw new Error('Esta conta está desativada.');
     if (!usuario.emailConfirmado) throw new Error('Confirme seu e-mail antes de entrar.');
     if (!usuario.aprovado) throw new Error('Sua conta ainda aguarda aprovação.');

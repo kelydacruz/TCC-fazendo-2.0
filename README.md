@@ -5,6 +5,7 @@ Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Con
 ## Funcionalidades
 
 - cadastro, confirmação de e-mail, recuperação de senha e aprovação de contas;
+- autenticação restrita a domínios institucionais separados para alunos e professores;
 - perfis de aluno, professor e administrador com autorização por rota;
 - fluxo completo de TCC: rascunho, envio, revisão, correções, aprovação, publicação e arquivamento;
 - upload de PDF e capa no MongoDB com validação e limite de tamanho;
@@ -42,5 +43,13 @@ views/        páginas e componentes EJS
 ## Configuração
 
 `MONGODB_URI` e `SESSION_SECRET` são obrigatórias em produção. Para confirmação de e-mail e recuperação de senha, configure também as variáveis `SMTP_*`. Sem SMTP, os links são mostrados apenas no console em desenvolvimento.
+
+Por segurança, os valores privados não fazem parte do `.env.example`. Adicione ao `.env` local ou ao painel da hospedagem: `MONGODB_URI`, `SESSION_SECRET`, `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM`, `ADMIN_EMAIL` e `ADMIN_PASSWORD`.
+
+`ALUNO_EMAIL_DOMAINS` e `PROFESSOR_EMAIL_DOMAINS` aceitam um ou mais domínios separados por vírgula. O perfil é definido pelo domínio; não existe seleção manual durante o cadastro.
+
+Neste projeto, alunos usam `@academico.ifsul.edu.br` e professores usam `@ifsul.edu.br`.
+
+Para testes locais, `DEV_QUICK_LOGIN=true` mostra botões de acesso rápido para aluno e professor. A rota é bloqueada sempre que `NODE_ENV=production`, mesmo que a flag seja configurada por engano.
 
 O `seed` cria cursos, turmas, os 11 módulos e a conta administrativa definida em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Troque a senha após o primeiro acesso.
