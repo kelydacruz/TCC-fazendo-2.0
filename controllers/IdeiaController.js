@@ -6,7 +6,24 @@ import { ehDono, lista, podeModerar, regexSegura } from '../utils/texto.js';
 
 export default class IdeiaController {
   constructor(caminhoBase='ideia/'){ this.caminhoBase=caminhoBase; }
-  list = async (req,res) => { const {q='',curso='',area='',dificuldade='',status='',ordem='recentes'}=req.query; const filtro={}; if(q){const busca=new RegExp(regexSegura(q),'i');filtro.$or=[{titulo:busca},{descricao:busca},{problema:busca}];} if(curso)filtro.curso=curso;if(area)filtro.area=area;if(dificuldade)filtro.dificuldade=dificuldade;if(status)filtro.status=status; const ideias=await Ideia.find(filtro).populate('curso autor tccVinculado').sort(ordem==='antigas'?{createdAt:1}:{createdAt:-1}); const [cursos,areas]=await Promise.all([Curso.find({ativo:true}),Ideia.distinct('area')]); res.render(this.caminhoBase+'lst',{title:'Banco de Ideias',ideias,cursos,areas,statusIdeia:STATUS_IDEIA,query:req.query}); };
+  list = async (req,res) => {
+    const {q='',curso='',area='',dificuldade='',status='',dataInicio='',dataFim='',ordem='recentes'}=req.query;
+    const filtro={};
+    if(q){const busca=new RegExp(regexSegura(q),'i');filtro.$or=[{titulo:busca},{descricao:busca},{problema:busca}];}
+    if(curso)filtro.curso=curso;
+    if(area)filtro.area=area;
+    if(dificuldade)filtro.dificuldade=dificuldade;
+    if(status)filtro.status=status;
+    if(dataInicio||dataFim){
+      filtro.createdAt={};
+      if(dataInicio){const inicio=new Date(`${dataInicio}T00:00:00`);if(!Number.isNaN(inicio.getTime()))filtro.createdAt.$gte=inicio;}
+      if(dataFim){const fim=new Date(`${dataFim}T23:59:59.999`);if(!Number.isNaN(fim.getTime()))filtro.createdAt.$lte=fim;}
+      if(!Object.keys(filtro.createdAt).length)delete filtro.createdAt;
+    }
+    const ideias=await Ideia.find(filtro).populate('curso autor tccVinculado').sort(ordem==='antigas'?{createdAt:1}:{createdAt:-1});
+    const [cursos,areas]=await Promise.all([Curso.find({ativo:true}).sort({nome:1}),Ideia.distinct('area')]);
+    res.render(this.caminhoBase+'lst',{title:'Banco de Ideias',ideias,cursos,areas:areas.sort(),statusIdeia:STATUS_IDEIA,query:req.query});
+  };
   detalhes = async (req,res) => { const ideia=await Ideia.findById(req.params.id).populate('curso autor tccVinculado'); if(!ideia)return res.status(404).render('404',{title:'Ideia não encontrada'}); const comentarios=await Comentario.find({ideia:ideia.id,oculto:false}).populate('autor').sort({createdAt:1}); res.render(this.caminhoBase+'detalhes',{title:ideia.titulo,ideia,comentarios}); };
   openAdd = async(req,res)=>res.render(this.caminhoBase+'add',{title:'Publicar ideia',cursos:await Curso.find({ativo:true})});
   add = async(req,res)=>{const ideia=await Ideia.create({titulo:req.body.titulo,descricao:req.body.descricao,problema:req.body.problema,curso:req.body.curso,area:req.body.area,dificuldade:req.body.dificuldade,conhecimentos:lista(req.body.conhecimentos),autor:req.session.usuario.id});req.flash('sucesso','Ideia publicada.');res.redirect('/ideias/'+ideia.id);};

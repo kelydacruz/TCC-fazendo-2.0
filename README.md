@@ -28,6 +28,8 @@ npm start
 
 Acesse `http://localhost:3001`.
 
+O passo a passo completo para configurar o ambiente e validar os acessos de aluno, professor e administrador está em [`TESTING.md`](TESTING.md). O roteiro inclui o fluxo aluno envia → professor avalia → professor libera para o catálogo público.
+
 ## Estrutura
 
 ```text
@@ -54,4 +56,4 @@ Neste projeto, alunos usam `@academico.ifsul.edu.br` e professores usam `@ifsul.
 
 Para testes locais, `DEV_QUICK_LOGIN=true` mostra botões de acesso rápido para aluno e professor. A rota é bloqueada sempre que `NODE_ENV=production`, mesmo que a flag seja configurada por engano.
 
-O `seed` cria cursos, turmas, os 11 módulos e a conta administrativa definida em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Troque a senha após o primeiro acesso.
+O `seed` cria quatro cursos, turmas de anos diferentes, seis TCCs, cinco ideias, comentários, contas rápidas, os 11 módulos completos e a conta administrativa definida em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Troque a senha após o primeiro acesso.

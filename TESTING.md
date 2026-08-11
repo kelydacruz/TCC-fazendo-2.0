@@ -1,0 +1,164 @@
+# Como testar o AcervoTCC
+
+Este roteiro cobre a instalação, os acessos rápidos de aluno e professor e o fluxo completo até um TCC aparecer no catálogo público.
+
+## 1. Pré-requisitos
+
+- Node.js 18 ou superior;
+- npm;
+- MongoDB local ou uma conexão do MongoDB Atlas;
+- um arquivo PDF pequeno e válido para simular a entrega.
+
+Confira as versões:
+
+```bash
+node --version
+npm --version
+```
+
+## 2. Preparar o projeto
+
+Na pasta do projeto:
+
+```bash
+git switch feat/acervotcc-completo
+cp .env.example .env
+npm install
+```
+
+Abra o arquivo `.env` e mantenha as configurações de desenvolvimento. Acrescente valores privados próprios:
+
+```dotenv
+BASE_URL=http://localhost:3001
+PORT=3001
+NODE_ENV=development
+DEV_QUICK_LOGIN=true
+
+MONGODB_URI=mongodb://127.0.0.1:27017/acervotcc
+SESSION_SECRET=crie-uma-frase-secreta-longa-e-diferente
+
+ALUNO_EMAIL_DOMAINS=academico.ifsul.edu.br
+PROFESSOR_EMAIL_DOMAINS=ifsul.edu.br
+
+ADMIN_EMAIL=admin@seu-dominio-institucional.edu.br
+ADMIN_PASSWORD=crie-uma-senha-com-12-ou-mais-caracteres
+```
+
+Se usar o MongoDB Atlas, substitua `MONGODB_URI` pela conexão fornecida pelo serviço. Não publique o arquivo `.env` nem compartilhe suas senhas.
+
+## 3. Criar os dados de demonstração
+
+Execute:
+
+```bash
+npm run seed
+```
+
+O comando é seguro para ser repetido: ele atualiza a demonstração sem criar cópias dos mesmos registros. Serão preparados quatro cursos, turmas de três anos, seis TCCs em diferentes etapas, cinco ideias, comentários, contas rápidas e os 11 módulos do tutorial.
+
+## 4. Iniciar e navegar
+
+```bash
+npm start
+```
+
+Acesse [http://localhost:3001](http://localhost:3001). Verifique inicialmente:
+
+1. Página inicial, pesquisa e filtros rápidos;
+2. catálogo de TCCs e combinação dos filtros;
+3. detalhe de um trabalho, visualização e download do PDF;
+4. seção **Aprenda a fazer seu TCC**, seus 11 módulos e materiais;
+5. Banco de Ideias, filtros, detalhes e comentários;
+6. layout em largura de celular nas ferramentas de desenvolvedor do navegador.
+
+## 5. Testar como aluno
+
+1. Abra **Entrar**.
+2. Na caixa amarela de desenvolvimento, clique em **Entrar como aluno**.
+3. Abra **Enviar TCC**.
+4. Preencha título, resumo, autores, palavras-chave, curso, turma, ano e área.
+5. Selecione **Professor de Teste** como orientador.
+6. Anexe um PDF válido, aceite o termo de autorização e escolha **Enviar para avaliação**.
+7. Confirme que o status passou para **Enviado**.
+8. Abra a trilha de aprendizagem e marque um módulo como concluído.
+9. Publique uma ideia, comente e salve um TCC ou uma ideia como favorito.
+10. Saia da conta.
+
+O aluno pode editar um rascunho ou um trabalho em **Correções solicitadas**, mas não pode aprovar nem publicar o próprio TCC.
+
+## 6. Testar como professor e liberar para o site
+
+1. Entre novamente e clique em **Entrar como professor**.
+2. No painel, confira **Aguardando revisão**.
+3. Abra o trabalho enviado pelo aluno. Somente trabalhos orientados por esse professor ficam disponíveis para ele.
+4. Escolha **Aguardando revisão** para registrar o início da análise.
+5. Escolha **Correções solicitadas** e escreva uma observação para testar a devolução ao aluno; ou escolha **Aprovado** para concluir a avaliação.
+6. Quando o TCC estiver **Aprovado**, abra-o novamente. A ação **Publicado — liberar para o site** aparecerá separadamente.
+7. Confirme a liberação. O histórico deve registrar o professor, a data e a observação.
+8. Saia da conta e procure o título no catálogo público.
+
+Esse é o diferencial do fluxo: **aprovar a avaliação não publica o trabalho**. Somente o professor orientador pode executar a liberação final, e o termo de autorização do aluno precisa estar aceito.
+
+Para testar as correções, entre novamente como aluno, abra o trabalho devolvido, substitua o PDF e envie. O status será **Reenviado** e o professor poderá revisar outra vez.
+
+## 7. Testar moderação e administração
+
+Como professor:
+
+1. Abra uma ideia e altere seu status em **Editar/Moderar**;
+2. em um comentário, use **Ocultar como moderador**;
+3. confira os itens de revisão e denúncias no painel.
+
+Como administrador, use o e-mail e a senha definidos em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Confira:
+
+- aprovação, ativação e perfil dos usuários;
+- cadastro de cursos e turmas;
+- edição dos módulos da trilha;
+- denúncias e configurações institucionais;
+- indicadores do painel administrativo.
+
+Um usuário não consegue escolher o perfil de administrador no cadastro.
+
+## 8. Executar verificações automáticas
+
+Em outro terminal, com o projeto parado ou em execução:
+
+```bash
+npm test
+npm audit --omit=dev
+```
+
+Os testes verificam páginas públicas, CSRF, autenticação de desenvolvimento, domínios institucionais, modelos, permissões do fluxo de TCC e integridade dos 11 módulos.
+
+## 9. Testar o cadastro institucional
+
+Os botões rápidos existem apenas em desenvolvimento. Para testar o cadastro normal:
+
+1. abra **Criar conta**;
+2. use um endereço que termine em `@academico.ifsul.edu.br` para aluno ou `@ifsul.edu.br` para professor;
+3. confirme o e-mail pelo link exibido no terminal quando o SMTP não estiver configurado;
+4. entre como administrador e aprove a conta;
+5. faça login com a nova conta.
+
+O perfil é inferido pelo domínio. Não há um seletor que permita ao usuário se declarar professor ou administrador.
+
+## 10. Problemas comuns
+
+- **O banco não conecta:** revise `MONGODB_URI`; no Atlas, confira usuário, senha, rede autorizada e caracteres especiais da conexão.
+- **Os botões rápidos não aparecem:** confirme `NODE_ENV=development` e `DEV_QUICK_LOGIN=true`, depois reinicie o servidor.
+- **Não há professor no formulário de TCC:** execute `npm run seed` ou entre uma vez com o botão **Professor**.
+- **O seed recusa a senha:** `ADMIN_PASSWORD` precisa ter pelo menos 12 caracteres.
+- **O PDF é rejeitado:** use um PDF real; renomear outro tipo de arquivo para `.pdf` não é suficiente.
+- **A porta já está em uso:** altere `PORT` e `BASE_URL` no `.env`.
+
+## 11. Antes de colocar em produção
+
+Use, no mínimo:
+
+```dotenv
+NODE_ENV=production
+DEV_QUICK_LOGIN=false
+SESSION_SECRET=uma-chave-longa-aleatoria-e-exclusiva
+```
+
+Configure HTTPS, SMTP institucional, credenciais próprias, backup do MongoDB e limites adequados de armazenamento. Nunca reutilize as contas, senhas ou dados de demonstração como dados reais.
