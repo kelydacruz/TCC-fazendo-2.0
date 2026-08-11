@@ -7,7 +7,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node --watch index.js",
-    "seed": "node scripts/seed.js",
+    "seed": "node scripts/setup.js",
+    "seed:demo": "node scripts/seed.js",
+    "limpar:acervo": "node scripts/limparAcervo.js",
     "test": "node --test"
   },
   "dependencies": {

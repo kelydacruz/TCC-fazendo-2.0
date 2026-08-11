@@ -58,4 +58,6 @@ Neste projeto, alunos usam `@academico.ifsul.edu.br` e professores usam `@ifsul.
 
 Para testes locais, `DEV_QUICK_LOGIN=true` mostra botões de acesso rápido para aluno e professor. A rota é bloqueada sempre que `NODE_ENV=production`, mesmo que a flag seja configurada por engano.
 
-O `seed` cria quatro cursos, turmas de anos diferentes, seis TCCs, cinco ideias, comentários, contas rápidas, os 11 módulos completos e a conta administrativa definida em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Troque a senha após o primeiro acesso.
+O `seed` prepara a conta administrativa, as configurações e os 11 módulos completos da trilha. Ele **não cria cursos nem turmas**: esses cadastros começam vazios para que a instituição inclua somente sua estrutura real pelo painel administrativo.
+
+Se o banco já recebeu os antigos dados fictícios e você quer recomeçar sem cursos e turmas, execute `npm run limpar:acervo -- --confirmar` antes de `npm run seed`. A limpeza remove cursos, turmas, TCCs, ideias, comentários e denúncias; mantém as contas, configurações e módulos. O conjunto fictício continua disponível opcionalmente por `npm run seed:demo`.

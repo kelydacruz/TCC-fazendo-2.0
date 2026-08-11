@@ -46,7 +46,7 @@ ADMIN_PASSWORD=crie-uma-senha-com-12-ou-mais-caracteres
 
 Se usar o MongoDB Atlas, substitua `MONGODB_URI` pela conexão fornecida pelo serviço. Não publique o arquivo `.env` nem compartilhe suas senhas.
 
-## 3. Criar os dados de demonstração
+## 3. Preparar o banco vazio
 
 Execute:
 
@@ -54,9 +54,28 @@ Execute:
 npm run seed
 ```
 
-O comando é seguro para ser repetido: ele atualiza a demonstração sem criar cópias dos mesmos registros. Serão preparados quatro cursos, turmas de três anos, seis TCCs em diferentes etapas, cinco ideias, comentários, contas rápidas e os 11 módulos do tutorial.
+O comando é seguro para ser repetido. Ele prepara o administrador, as configurações e os 11 módulos do tutorial, mas não cria cursos nem turmas.
 
-## 4. Iniciar e navegar
+Se você já executou uma versão anterior do projeto e ainda vê dados fictícios, faça a limpeza explícita uma única vez:
+
+```bash
+npm run limpar:acervo -- --confirmar
+npm run seed
+```
+
+Essa limpeza apaga cursos, turmas, TCCs, ideias, comentários e denúncias. As contas, as configurações e a trilha são preservadas. Não use o comando em um banco com dados reais que devam ser mantidos.
+
+## 4. Cadastrar seu primeiro curso e sua primeira turma
+
+1. Inicie o projeto com `npm start` e acesse `http://localhost:3001`.
+2. Entre com o e-mail e a senha de administrador definidos no `.env`.
+3. Abra **Administração → Cursos**.
+4. Clique em **Novo curso**, informe nome, sigla e descrição e salve.
+5. Clique em **Nova turma**, escolha o curso, informe o nome e o ano e salve.
+
+O botão **Nova turma** aparece depois que existe pelo menos um curso ativo.
+
+## 5. Iniciar e navegar
 
 ```bash
 npm start
@@ -71,12 +90,19 @@ Acesse [http://localhost:3001](http://localhost:3001). Verifique inicialmente:
 5. Banco de Ideias, filtros, detalhes e comentários;
 6. layout em largura de celular nas ferramentas de desenvolvedor do navegador.
 
-## 5. Testar como aluno
+## 6. Preparar e testar as contas rápidas
+
+1. Saia da conta administrativa e, na tela **Entrar**, clique uma vez em **Entrar como professor**. Depois, saia.
+2. Clique uma vez em **Entrar como aluno**. Depois, saia.
+3. Entre novamente como administrador e abra **Administração → Usuários**.
+4. Abra a conta **Aluno de Teste**, selecione o curso e a turma que você cadastrou e salve.
+
+Agora teste como aluno:
 
 1. Abra **Entrar**.
 2. Na caixa amarela de desenvolvimento, clique em **Entrar como aluno**.
 3. Abra **Enviar TCC**.
-4. Confirme o curso e a turma exibidos no bloco de vínculo acadêmico. O aluno não consegue alterá-los.
+4. Confirme o curso e a turma que você vinculou no bloco acadêmico. O aluno não consegue alterá-los.
 5. Preencha título, resumo, autores, palavras-chave, ano e área.
 6. Selecione **Professor de Teste** como orientador.
 7. Anexe um PDF válido, aceite o termo de autorização e escolha **Enviar para avaliação**.
@@ -87,7 +113,7 @@ Acesse [http://localhost:3001](http://localhost:3001). Verifique inicialmente:
 
 O aluno pode editar um rascunho ou um trabalho em **Correções solicitadas**, mas não pode aprovar nem publicar o próprio TCC.
 
-## 6. Testar como professor e liberar para o site
+## 7. Testar como professor e liberar para o site
 
 1. Entre novamente e clique em **Entrar como professor**.
 2. No painel, confira **Aguardando revisão**.
@@ -102,7 +128,7 @@ Esse é o diferencial do fluxo: **aprovar a avaliação não publica o trabalho*
 
 Para testar as correções, entre novamente como aluno, abra o trabalho devolvido, substitua o PDF e envie. O status será **Reenviado** e o professor poderá revisar outra vez.
 
-## 7. Testar moderação e administração
+## 8. Testar moderação e administração
 
 Como professor:
 
@@ -123,7 +149,7 @@ Cadastros sem relacionamentos podem ser excluídos. Cursos, turmas e usuários q
 
 Um usuário não consegue escolher o perfil de administrador no cadastro.
 
-## 8. Executar verificações automáticas
+## 9. Executar verificações automáticas
 
 Em outro terminal, com o projeto parado ou em execução:
 
@@ -134,7 +160,7 @@ npm audit --omit=dev
 
 Os testes verificam páginas públicas, CSRF, autenticação de desenvolvimento, domínios institucionais, modelos, permissões do fluxo de TCC e integridade dos 11 módulos.
 
-## 9. Testar o cadastro institucional
+## 10. Testar o cadastro institucional
 
 Os botões rápidos existem apenas em desenvolvimento. Para testar o cadastro normal:
 
@@ -146,16 +172,18 @@ Os botões rápidos existem apenas em desenvolvimento. Para testar o cadastro no
 
 O perfil é inferido pelo domínio. Não há um seletor que permita ao usuário se declarar professor ou administrador.
 
-## 10. Problemas comuns
+## 11. Problemas comuns
 
 - **O banco não conecta:** revise `MONGODB_URI`; no Atlas, confira usuário, senha, rede autorizada e caracteres especiais da conexão.
 - **Os botões rápidos não aparecem:** confirme `NODE_ENV=development` e `DEV_QUICK_LOGIN=true`, depois reinicie o servidor.
-- **Não há professor no formulário de TCC:** execute `npm run seed` ou entre uma vez com o botão **Professor**.
+- **Não há professor no formulário de TCC:** entre uma vez com o botão **Professor** para criar a conta rápida.
+- **O aluno não consegue enviar TCC:** entre como administrador e vincule um curso e uma turma ativos à conta do aluno.
+- **Cursos antigos continuam aparecendo:** execute `npm run limpar:acervo -- --confirmar` somente se puder apagar todo o conteúdo acadêmico atual.
 - **O seed recusa a senha:** `ADMIN_PASSWORD` precisa ter pelo menos 12 caracteres.
 - **O PDF é rejeitado:** use um PDF real; renomear outro tipo de arquivo para `.pdf` não é suficiente.
 - **A porta já está em uso:** altere `PORT` e `BASE_URL` no `.env`.
 
-## 11. Antes de colocar em produção
+## 12. Antes de colocar em produção
 
 Use, no mínimo:
 
