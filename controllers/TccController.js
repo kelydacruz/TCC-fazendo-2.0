@@ -6,6 +6,8 @@ import { ehDono, lista, regexSegura } from '../utils/texto.js';
 import Configuracao from '../models/configuracao.js';
 import { acoesAvaliacao, descricaoStatus, validarTransicao } from '../utils/fluxoTcc.js';
 import { alunoPodeEnviarPara } from '../utils/vinculoAcademico.js';
+import { bancoDisponivel } from '../config/conexao.js';
+import { registrarVisualizacao } from '../utils/metricasTcc.js';
 
 function falha(mensagem,status=400){return Object.assign(new Error(mensagem),{status});}
 
@@ -126,10 +128,12 @@ export default class TccController {
     const tcc = await Tcc.findById(req.params.id);
     if (!tcc || (!ehDono(tcc.alunoResponsavel, req.session.usuario) && req.session.usuario.perfil !== 'administrador')) throw Object.assign(new Error('Acesso negado.'), { status:403 });
     if (req.session.usuario.perfil !== 'administrador' && tcc.status !== 'Rascunho') throw new Error('Somente rascunhos podem ser excluídos.');
-    await tcc.deleteOne(); req.flash('sucesso','TCC excluído.'); res.redirect('/tcc/lst');
+    await Promise.all([tcc.deleteOne(),Usuario.updateMany({},{$pull:{favoritosTcc:tcc.id}})]); req.flash('sucesso','TCC excluído.'); res.redirect('/tcc/lst');
   };
 
   catalogo = async (req, res) => {
+    res.set('Cache-Control','no-store');
+    if(!bancoDisponivel())return res.render('catalogo-db',{title:'Acervo de TCCs',resultado:[],cursos:[],turmas:[],orientadores:[],areas:[],query:req.query});
     const { q='', curso='', turma='', ano='', area='', orientador='', ordem='recentes' } = req.query;
     const filtro = { status:'Publicado' };
     if (q) { const busca = new RegExp(regexSegura(q), 'i'); const orientadoresEncontrados = await Usuario.find({perfil:'professor',nome:busca}).distinct('_id'); filtro.$or = [{titulo:busca},{resumo:busca},{palavrasChave:busca},{autores:busca},{orientador:{$in:orientadoresEncontrados}}]; }
@@ -140,13 +144,18 @@ export default class TccController {
   };
 
   detalhes = async (req, res) => {
-    const tcc = await Tcc.findOneAndUpdate({_id:req.params.id,status:'Publicado'},{$inc:{visualizacoes:1}},{new:true}).select('-pdf.dados').populate('curso turma orientador');
+    if(!bancoDisponivel())return res.status(404).render('404',{title:'Trabalho não encontrado'});
+    const tcc = await registrarVisualizacao(Tcc,req.params.id);
     if (!tcc) return res.status(404).render('404',{title:'Trabalho não encontrado'});
-    const relacionados = await Tcc.find({_id:{$ne:tcc.id},status:'Publicado',$or:[{curso:tcc.curso._id},{area:tcc.area}]}).select('-pdf.dados -capa.dados').populate('curso').limit(3);
-    res.render('detalhes-db',{title:tcc.titulo,tcc,relacionados});
+    const [relacionados,favorito] = await Promise.all([
+      Tcc.find({_id:{$ne:tcc.id},status:'Publicado',$or:[...(tcc.curso? [{curso:tcc.curso._id}]:[]),{area:tcc.area}]}).select('-pdf.dados -capa.dados').populate('curso').limit(3),
+      req.session.usuario?Usuario.exists({_id:req.session.usuario.id,favoritosTcc:tcc.id}):false
+    ]);
+    res.set('Cache-Control','no-store');
+    res.render('detalhes-db',{title:tcc.titulo,tcc,relacionados,favorito:Boolean(favorito)});
   };
 
-  capa = async (req, res) => { const tcc=await Tcc.findOne({_id:req.params.id,status:'Publicado'}).select('capa'); if(!tcc?.capa?.dados)return res.status(404).end(); res.type(tcc.capa.mime).send(tcc.capa.dados); };
-  pdf = async (req, res) => { const tcc=await Tcc.findOne({_id:req.params.id,status:'Publicado'}).select('pdf'); if(!tcc?.pdf?.dados)return res.status(404).end(); res.type('pdf').set('Content-Disposition','inline; filename="'+tcc.pdf.nome.replace(/["\r\n]/g,'')+'"').send(tcc.pdf.dados); };
-  download = async (req, res) => { const config=await Configuracao.findOne({chave:'geral'});if(config&&!config.permitirDownloads)throw Object.assign(new Error('Downloads estão temporariamente desativados.'),{status:403});const tcc=await Tcc.findOneAndUpdate({_id:req.params.id,status:'Publicado'},{$inc:{downloads:1}},{new:true}).select('pdf'); if(!tcc?.pdf?.dados)return res.status(404).end(); res.type('pdf').set('Content-Disposition','attachment; filename="'+tcc.pdf.nome.replace(/["\r\n]/g,'')+'"').send(tcc.pdf.dados); };
+  capa = async (req, res) => { if(!bancoDisponivel())return res.status(404).end();const tcc=await Tcc.findOne({_id:req.params.id,status:'Publicado'}).select('capa'); if(!tcc?.capa?.dados)return res.status(404).end(); res.type(tcc.capa.mime).send(tcc.capa.dados); };
+  pdf = async (req, res) => { if(!bancoDisponivel())return res.status(404).end();const tcc=await Tcc.findOne({_id:req.params.id,status:'Publicado'}).select('pdf'); if(!tcc?.pdf?.dados)return res.status(404).end(); res.type('pdf').set('Content-Disposition','inline; filename="'+tcc.pdf.nome.replace(/["\r\n]/g,'')+'"').send(tcc.pdf.dados); };
+  download = async (req, res) => { if(!bancoDisponivel())return res.status(404).end();const config=await Configuracao.findOne({chave:'geral'});if(config&&!config.permitirDownloads)throw Object.assign(new Error('Downloads estão temporariamente desativados.'),{status:403});const tcc=await Tcc.findOneAndUpdate({_id:req.params.id,status:'Publicado'},{$inc:{downloads:1}},{new:true}).select('pdf'); if(!tcc?.pdf?.dados)return res.status(404).end(); res.type('pdf').set('Content-Disposition','attachment; filename="'+tcc.pdf.nome.replace(/["\r\n]/g,'')+'"').send(tcc.pdf.dados); };
 }

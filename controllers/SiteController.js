@@ -3,11 +3,14 @@ import Curso from '../models/curso.js';
 import Ideia from '../models/ideia.js';
 import Configuracao from '../models/configuracao.js';
 import { bancoDisponivel } from '../config/conexao.js';
-import { cursos, tccs } from '../data/mock.js';
 
 export default class SiteController {
   home = async(req, res) => {
-    if (!bancoDisponivel()) return res.render('home', { title:'Início', tccs, cursos });
+    res.set('Cache-Control','no-store');
+    if (!bancoDisponivel()) return res.render('home-db', {
+      title:'Início', recentes:[], maisAcessados:[], cursos:[], anos:[], areas:[],
+      stats:{tccs:0,views:0,downloads:0,ideias:0}
+    });
     const [recentes,maisAcessados,cursosDb,anos,areas,totalTcc,totalViews,totalDownloads,totalIdeias] = await Promise.all([
       Tcc.find({status:'Publicado'}).select('-pdf.dados -capa.dados').populate('curso orientador').sort({publicadoEm:-1}).limit(3),
       Tcc.find({status:'Publicado'}).select('-pdf.dados -capa.dados').populate('curso orientador').sort({visualizacoes:-1}).limit(3),

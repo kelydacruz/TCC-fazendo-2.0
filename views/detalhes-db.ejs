@@ -1,1 +1,28 @@
-<%- include('partials/header') %><section class="detalhe-hero"><div class="container"><a class="voltar" href="/tccs"><i class="fa-solid fa-arrow-left"></i> Voltar ao acervo</a><div class="breadcrumb"><span><%= tcc.curso?.nome %></span><i class="fa-solid fa-chevron-right"></i><span><%= tcc.ano %></span></div><h1><%= tcc.titulo %></h1><p class="autoria"><% if(tcc.ocultarAutores){ %><strong>Autoria preservada a pedido dos autores</strong><% }else{ %>Por <strong><%= tcc.autores.join(' e ') %></strong><% } %> · Orientação: <strong><%= tcc.orientador?.nome %></strong></p><div class="tags"><% tcc.palavrasChave.forEach(tag=>{ %><span><%= tag %></span><% }) %></div></div></section><section class="secao container detalhe-grid"><article><h2>Resumo</h2><p class="resumo"><%= tcc.resumo %></p><h2>Informações do trabalho</h2><dl class="info-grid"><div><dt>Curso</dt><dd><%= tcc.curso?.nome %></dd></div><div><dt>Turma</dt><dd><%= tcc.turma?.nome %></dd></div><div><dt>Ano</dt><dd><%= tcc.ano %></dd></div><div><dt>Área</dt><dd><%= tcc.area %></dd></div><div><dt>Publicação</dt><dd><%= tcc.publicadoEm?new Date(tcc.publicadoEm).toLocaleDateString('pt-BR'):'-' %></dd></div><div><dt>Status</dt><dd><span class="status disponivel">Publicado pelo orientador</span></dd></div></dl></article><aside class="download-box"><div class="pdf-icon"><i class="fa-regular fa-file-pdf"></i></div><h2>Trabalho completo</h2><a class="btn btn-primario largura" target="_blank" href="/tccs/<%= tcc.id %>/pdf"><i class="fa-regular fa-eye"></i> Visualizar PDF</a><a class="btn btn-outline largura" href="/tccs/<%= tcc.id %>/download"><i class="fa-solid fa-download"></i> Baixar arquivo</a><button class="btn btn-claro largura copiar"><i class="fa-regular fa-copy"></i> Copiar link</button><% if(usuarioAtual){ %><form method="post" action="/tccs/<%= tcc.id %>/favorito"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-claro largura"><i class="fa-regular fa-bookmark"></i> Salvar favorito</button></form><% } %><div class="metricas"><span><strong><%= tcc.visualizacoes %></strong> visualizações</span><span><strong><%= tcc.downloads %></strong> downloads</span></div></aside></section><% if(relacionados.length){ %><section class="secao fundo"><div class="container"><h2>Trabalhos relacionados</h2><div class="cards-grid"><% relacionados.forEach(item=>{ %><%- include('partials/tcc-card-db',{item}) %><% }) %></div></div></section><% } %><%- include('partials/footer') %>
+<%- include('partials/header') %>
+<section class="detalhe-hero">
+  <div class="container">
+    <a class="voltar" href="/tccs"><i class="fa-solid fa-arrow-left"></i> Voltar ao acervo</a>
+    <div class="breadcrumb"><span><%= tcc.curso?.nome||'Curso' %></span><i class="fa-solid fa-chevron-right"></i><span><%= tcc.ano %></span></div>
+    <h1><%= tcc.titulo %></h1>
+    <p class="autoria"><% if(tcc.ocultarAutores){ %><strong>Autoria preservada a pedido dos autores</strong><% }else{ %>Por <strong><%= tcc.autores.join(' e ') %></strong><% } %> · Orientação: <strong><%= tcc.orientador?.nome %></strong></p>
+    <div class="tags"><% tcc.palavrasChave.forEach(tag=>{ %><span><%= tag %></span><% }) %></div>
+  </div>
+</section>
+<section class="secao container detalhe-grid">
+  <article>
+    <h2>Resumo</h2><p class="resumo"><%= tcc.resumo %></p>
+    <h2>Informações do trabalho</h2>
+    <dl class="info-grid"><div><dt>Curso</dt><dd><%= tcc.curso?.nome||'-' %></dd></div><div><dt>Turma</dt><dd><%= tcc.turma?.nome||'-' %></dd></div><div><dt>Ano</dt><dd><%= tcc.ano %></dd></div><div><dt>Área</dt><dd><%= tcc.area %></dd></div><div><dt>Publicação</dt><dd><%= tcc.publicadoEm?new Date(tcc.publicadoEm).toLocaleDateString('pt-BR'):'-' %></dd></div><div><dt>Status</dt><dd><span class="status disponivel">Publicado pelo orientador</span></dd></div></dl>
+  </article>
+  <aside class="download-box">
+    <div class="pdf-icon"><i class="fa-regular fa-file-pdf"></i></div>
+    <h2>Trabalho completo</h2>
+    <a class="btn btn-primario largura" target="_blank" href="/tccs/<%= tcc.id %>/pdf"><i class="fa-regular fa-eye"></i> Visualizar PDF</a>
+    <a class="btn btn-outline largura" href="/tccs/<%= tcc.id %>/download"><i class="fa-solid fa-download"></i> Baixar arquivo</a>
+    <button class="btn btn-claro largura copiar"><i class="fa-regular fa-copy"></i> Copiar link</button>
+    <% if(usuarioAtual){ %><form method="post" action="/tccs/<%= tcc.id %>/favorito"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-claro largura"><i class="fa-<%= favorito?'solid':'regular' %> fa-bookmark"></i> <%= favorito?'Remover dos favoritos':'Salvar favorito' %></button></form><% } %>
+    <div class="metricas"><span><strong><%= tcc.visualizacoes %></strong> visualizações</span><span><strong><%= tcc.downloads %></strong> downloads</span></div>
+  </aside>
+</section>
+<% if(relacionados.length){ %><section class="secao fundo"><div class="container"><h2>Trabalhos relacionados</h2><div class="cards-grid"><% relacionados.forEach(item=>{ %><%- include('partials/tcc-card-db',{item}) %><% }) %></div></div></section><% } %>
+<%- include('partials/footer') %>

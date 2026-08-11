@@ -1,10 +1,28 @@
 <%- include('../partials/header') %>
-<section class="page-hero <%= usuarioAtual.perfil==='administrador'?'admin-hero':'' %>"><div class="container"><span class="eyebrow"><%= usuarioAtual.perfil==='administrador'?'Administração':usuarioAtual.perfil %></span><h1><%= usuarioAtual.perfil==='administrador'?'Painel administrativo':'Olá, '+usuarioAtual.nome.split(' ')[0] %></h1><p><%= usuarioAtual.perfil==='administrador'?'Acompanhe o essencial e acesse cada área de gestão.':'Acompanhe suas atividades e acesse as ferramentas do seu perfil.' %></p></div></section>
+<section class="page-hero <%= usuarioAtual.perfil==='administrador'?'admin-hero':'' %>">
+  <div class="container">
+    <span class="eyebrow"><%= usuarioAtual.perfil==='administrador'?'Administração':usuarioAtual.perfil %></span>
+    <h1><%= usuarioAtual.perfil==='administrador'?'Painel administrativo':'Olá, '+usuarioAtual.nome.split(' ')[0] %></h1>
+    <p><%= usuarioAtual.perfil==='administrador'?'Acompanhe o essencial e acesse cada área de gestão.':'Acompanhe suas atividades e acesse as ferramentas do seu perfil.' %></p>
+  </div>
+</section>
 <% const rotulos={tccsEnviados:'TCCs enviados',correcoesSolicitadas:'Correções solicitadas',ideiasPublicadas:'Ideias publicadas',favoritos:'Itens favoritos',modulosConcluidos:'Módulos concluídos',aguardandoRevisao:'Aguardando revisão',aguardandoLiberacao:'Aguardando liberação',trabalhosAvaliados:'Trabalhos avaliados',trabalhosOrientados:'Trabalhos orientados',ideiasEmAnalise:'Ideias em análise',denunciasPendentes:'Denúncias pendentes',totalUsuarios:'Usuários',totalTccs:'Total de TCCs',aguardandoAprovacao:'Aguardando aprovação',publicados:'TCCs publicados',totalDownloads:'Downloads',totalIdeias:'Ideias',comentarios:'Comentários'}; %>
 <% if(usuarioAtual.perfil==='administrador'){ %>
   <%- include('../admin/nav') %>
-  <section class="secao container"><div class="admin-resumo"><% ['totalUsuarios','publicados','aguardandoAprovacao','denunciasPendentes'].forEach(chave=>{ %><article><span><%= rotulos[chave] %></span><strong><%= dados[chave]||0 %></strong></article><% }) %></div><details class="admin-indicadores"><summary>Ver todos os indicadores <i class="fa-solid fa-chevron-down"></i></summary><div class="indicadores-lista"><% Object.entries(dados).filter(([chave,valor])=>typeof valor==='number'&&!['totalUsuarios','publicados','aguardandoAprovacao','denunciasPendentes'].includes(chave)).forEach(([chave,valor])=>{ %><span><%= rotulos[chave]||chave %><strong><%= valor %></strong></span><% }) %></div></details></section>
+  <section class="secao container">
+    <div class="admin-resumo"><% ['totalUsuarios','publicados','aguardandoAprovacao','denunciasPendentes'].forEach(chave=>{ %><article><span><%= rotulos[chave] %></span><strong><%= dados[chave]||0 %></strong></article><% }) %></div>
+    <details class="admin-indicadores"><summary>Ver todos os indicadores <i class="fa-solid fa-chevron-down"></i></summary><div class="indicadores-lista"><% Object.entries(dados).filter(([chave,valor])=>typeof valor==='number'&&!['totalUsuarios','publicados','aguardandoAprovacao','denunciasPendentes'].includes(chave)).forEach(([chave,valor])=>{ %><span><%= rotulos[chave]||chave %><strong><%= valor %></strong></span><% }) %></div></details>
+  </section>
 <% }else{ %>
-  <section class="secao container"><div class="atalhos"><a href="/tcc/lst"><i class="fa-regular fa-file-lines"></i><span><strong>Meus TCCs</strong>Acompanhar e revisar</span></a><a href="/ideias"><i class="fa-regular fa-lightbulb"></i><span><strong>Banco de Ideias</strong>Publicar e colaborar</span></a><a href="/aprender"><i class="fa-solid fa-route"></i><span><strong>Trilha</strong>Continuar aprendendo</span></a></div><h2>Visão geral</h2><div class="painel-cards"><% Object.entries(dados).filter(([,valor])=>typeof valor==='number').forEach(([chave,valor])=>{ %><article><i class="fa-solid fa-chart-simple"></i><span><strong><%= valor %></strong><%= rotulos[chave]||chave %></span></article><% }) %></div></section>
+  <section class="secao container">
+    <div class="atalhos">
+      <a href="/tcc/lst"><i class="fa-regular fa-file-lines"></i><span><strong>Meus TCCs</strong>Acompanhar e revisar</span></a>
+      <a href="/favoritos"><i class="fa-regular fa-bookmark"></i><span><strong>Meus favoritos</strong>TCCs e ideias salvos</span></a>
+      <a href="/ideias"><i class="fa-regular fa-lightbulb"></i><span><strong>Banco de Ideias</strong>Publicar e colaborar</span></a>
+      <a href="/aprender"><i class="fa-solid fa-route"></i><span><strong>Trilha</strong>Continuar aprendendo</span></a>
+    </div>
+    <h2>Visão geral</h2>
+    <div class="painel-cards"><% Object.entries(dados).filter(([,valor])=>typeof valor==='number').forEach(([chave,valor])=>{ %><article><i class="fa-solid fa-chart-simple"></i><span><strong><%= valor %></strong><%= rotulos[chave]||chave %></span></article><% }) %></div>
+  </section>
 <% } %>
 <%- include('../partials/footer') %>

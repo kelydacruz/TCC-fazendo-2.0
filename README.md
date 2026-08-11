@@ -60,4 +60,4 @@ Para testes locais, `DEV_QUICK_LOGIN=true` mostra botões de acesso rápido para
 
 O `seed` prepara a conta administrativa, as configurações e os 11 módulos completos da trilha. Ele **não cria cursos nem turmas**: esses cadastros começam vazios para que a instituição inclua somente sua estrutura real pelo painel administrativo.
 
-Se o banco já recebeu os antigos dados fictícios e você quer recomeçar sem cursos e turmas, execute `npm run limpar:acervo -- --confirmar` antes de `npm run seed`. A limpeza remove cursos, turmas, TCCs, ideias, comentários e denúncias; mantém as contas, configurações e módulos. O conjunto fictício continua disponível opcionalmente por `npm run seed:demo`.
+Se o banco já recebeu dados fictícios e você quer recomeçar, execute `npm run limpar:acervo -- --confirmar` antes de `npm run seed`. A limpeza remove cursos, turmas, TCCs, ideias, comentários e denúncias; mantém as contas, configurações e módulos. O projeto não possui mais carga de demonstração: todo o conteúdo acadêmico deve ser cadastrado pela instituição.

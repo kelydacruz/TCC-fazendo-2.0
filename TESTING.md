@@ -85,7 +85,7 @@ Acesse [http://localhost:3001](http://localhost:3001). Verifique inicialmente:
 
 1. Página inicial, pesquisa e filtros rápidos;
 2. catálogo de TCCs e combinação dos filtros;
-3. detalhe de um trabalho, visualização e download do PDF;
+3. detalhe de um trabalho, contador de visualizações e download do PDF;
 4. seção **Aprenda a fazer seu TCC**, seus 11 módulos e materiais;
 5. Banco de Ideias, filtros, detalhes e comentários;
 6. layout em largura de celular nas ferramentas de desenvolvedor do navegador.
@@ -108,7 +108,8 @@ Agora teste como aluno:
 7. Anexe um PDF válido, aceite o termo de autorização e escolha **Enviar para avaliação**.
 8. Confirme que o status passou para **Enviado**.
 9. Abra a trilha de aprendizagem e marque um módulo como concluído.
-10. Publique uma ideia, comente e salve um TCC ou uma ideia como favorito.
+10. Publique uma ideia, comente e salve um TCC ou uma ideia como favorito;
+11. volte ao painel e abra **Meus favoritos** para conferir e remover os itens salvos.
 11. Saia da conta.
 
 O aluno pode editar um rascunho ou um trabalho em **Correções solicitadas**, mas não pode aprovar nem publicar o próprio TCC.
@@ -158,7 +159,7 @@ npm test
 npm audit --omit=dev
 ```
 
-Os testes verificam páginas públicas, CSRF, autenticação de desenvolvimento, domínios institucionais, modelos, permissões do fluxo de TCC e integridade dos 11 módulos.
+Os testes verificam páginas públicas vazias, incremento atômico de visualizações, CSRF, autenticação de desenvolvimento, domínios institucionais, modelos, permissões do fluxo de TCC e integridade dos 11 módulos.
 
 ## 10. Testar o cadastro institucional
 
@@ -193,4 +194,4 @@ DEV_QUICK_LOGIN=false
 SESSION_SECRET=uma-chave-longa-aleatoria-e-exclusiva
 ```
 
-Configure HTTPS, SMTP institucional, credenciais próprias, backup do MongoDB e limites adequados de armazenamento. Nunca reutilize as contas, senhas ou dados de demonstração como dados reais.
+Configure HTTPS, SMTP institucional, credenciais próprias, backup do MongoDB e limites adequados de armazenamento. Nunca reutilize contas, senhas ou dados de teste como dados reais.
