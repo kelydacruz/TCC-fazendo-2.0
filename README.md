@@ -8,6 +8,8 @@ Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Con
 - autenticação restrita a domínios institucionais separados para alunos e professores;
 - perfis de aluno, professor e administrador com autorização por rota;
 - fluxo completo de TCC: rascunho, envio, revisão, correções, aprovação, publicação e arquivamento;
+- separação entre aprovação e publicação: somente o professor orientador libera um TCC aprovado para aparecer no site;
+- termo de autorização do aluno, opção de preservar a autoria e histórico com responsável e data;
 - upload de PDF e capa no MongoDB com validação e limite de tamanho;
 - catálogo público com pesquisa, filtros combinados, visualizações e downloads;
 - Banco de Ideias, favoritos, comentários, denúncias e moderação;

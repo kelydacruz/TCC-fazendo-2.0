@@ -23,7 +23,14 @@ const Tcc = new conexao.Schema({
   pdf: { dados: Buffer, nome: String, mime: String, tamanho: Number },
   capa: { dados: Buffer, mime: String },
   status: { type: String, enum: STATUS_TCC, default: 'Rascunho' },
+  termoAutorizacao: {
+    aceito: { type: Boolean, default: false },
+    aceitoEm: Date
+  },
+  ocultarAutores: { type: Boolean, default: false },
   publicadoEm: Date,
+  liberadoPor: { type: conexao.Schema.Types.ObjectId, ref: 'Usuario' },
+  liberadoEm: Date,
   visualizacoes: { type: Number, default: 0, min: 0 },
   downloads: { type: Number, default: 0, min: 0 },
   historico: [Historico]

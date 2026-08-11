@@ -8,3 +8,4 @@ test('novo usuário recebe perfil de aluno e aguarda aprovação',()=>{const usu
 test('fluxo do TCC contém todos os oito estados definidos',()=>assert.deepEqual(STATUS_TCC,['Rascunho','Enviado','Aguardando revisão','Correções solicitadas','Reenviado','Aprovado','Publicado','Arquivado']));
 test('TCC sem metadados obrigatórios falha na validação',()=>{const erro=new Tcc({titulo:'Exemplo'}).validateSync();assert.ok(erro.errors.resumo);assert.ok(erro.errors.alunoResponsavel);assert.ok(erro.errors.orientador);});
 test('status inválido de ideia é rejeitado',()=>{const ideia=new Ideia({status:'Inexistente'});const erro=ideia.validateSync();assert.ok(erro.errors.status);assert.ok(STATUS_IDEIA.includes('Utilizada'));});
+test('TCC começa sem autorização e sem liberação pública',()=>{const tcc=new Tcc();assert.equal(tcc.termoAutorizacao.aceito,false);assert.equal(tcc.liberadoEm,undefined);});
