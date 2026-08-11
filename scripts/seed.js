@@ -59,7 +59,7 @@ for (const modulo of modulosTcc) await Modulo.findOneAndUpdate({ordem:modulo.ord
 const senhaAleatoria = await bcrypt.hash(crypto.randomBytes(32).toString('hex'),12);
 const aluno = await Usuario.findOneAndUpdate(
   {email:emailDeTeste('aluno')},
-  {$set:{nome:'Aluno de Teste',perfil:'aluno',aprovado:true,emailConfirmado:true,ativo:true},$setOnInsert:{senha:senhaAleatoria}},
+  {$set:{nome:'Aluno de Teste',perfil:'aluno',curso:cursos[0].id,turma:turmas.get(`DS-${anoAtual}`).id,aprovado:true,emailConfirmado:true,ativo:true},$setOnInsert:{senha:senhaAleatoria}},
   {upsert:true,new:true,runValidators:true}
 );
 const professor = await Usuario.findOneAndUpdate(

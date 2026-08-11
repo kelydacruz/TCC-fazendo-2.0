@@ -7,6 +7,7 @@ Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Con
 - cadastro, confirmação de e-mail, recuperação de senha e aprovação de contas;
 - autenticação restrita a domínios institucionais separados para alunos e professores;
 - perfis de aluno, professor e administrador com autorização por rota;
+- vínculo obrigatório do aluno com curso e turma, impedindo envios para outro curso;
 - fluxo completo de TCC: rascunho, envio, revisão, correções, aprovação, publicação e arquivamento;
 - separação entre aprovação e publicação: somente o professor orientador libera um TCC aprovado para aparecer no site;
 - termo de autorização do aluno, opção de preservar a autoria e histórico com responsável e data;
@@ -15,6 +16,7 @@ Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Con
 - Banco de Ideias, favoritos, comentários, denúncias e moderação;
 - trilha de aprendizagem com 11 módulos e progresso individual;
 - gestão de usuários, cursos, turmas, módulos, denúncias e configurações;
+- administração compacta com exclusão segura ou desativação de registros vinculados;
 - painéis específicos por perfil, proteção CSRF, rate limiting e sessões seguras.
 
 ## Executar localmente

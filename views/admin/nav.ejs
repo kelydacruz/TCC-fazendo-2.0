@@ -1,0 +1,10 @@
+<nav class="admin-nav container" aria-label="Administração">
+  <a class="<%= caminhoAtual==='/painel'?'ativo':'' %>" href="/painel"><i class="fa-solid fa-chart-pie"></i> Visão geral</a>
+  <a class="<%= caminhoAtual.startsWith('/admin/usuarios')?'ativo':'' %>" href="/admin/usuarios"><i class="fa-solid fa-users"></i> Usuários</a>
+  <a class="<%= caminhoAtual.startsWith('/admin/cursos')?'ativo':'' %>" href="/admin/cursos"><i class="fa-solid fa-graduation-cap"></i> Cursos</a>
+  <a class="<%= caminhoAtual.startsWith('/tcc/')?'ativo':'' %>" href="/tcc/lst"><i class="fa-regular fa-file-lines"></i> TCCs</a>
+  <a class="<%= caminhoAtual.startsWith('/ideias')?'ativo':'' %>" href="/ideias"><i class="fa-regular fa-lightbulb"></i> Ideias</a>
+  <a class="<%= caminhoAtual.startsWith('/admin/modulos')?'ativo':'' %>" href="/admin/modulos"><i class="fa-solid fa-route"></i> Trilha</a>
+  <a class="<%= caminhoAtual.startsWith('/admin/denuncias')?'ativo':'' %>" href="/admin/denuncias"><i class="fa-solid fa-shield-halved"></i> Moderação</a>
+  <a class="<%= caminhoAtual.startsWith('/admin/configuracao')?'ativo':'' %>" href="/admin/configuracao"><i class="fa-solid fa-gear"></i> Configurações</a>
+</nav>

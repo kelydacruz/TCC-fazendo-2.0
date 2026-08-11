@@ -1,8 +1,20 @@
+import Usuario from '../models/usuario.js';
+
 export function autenticado(req, res, next) {
-  if (req.session?.usuario) return next();
-  req.session.retorno = req.originalUrl;
-  req.flash('erro', 'Entre na sua conta para continuar.');
-  return res.redirect('/entrar');
+  if (!req.session?.usuario) {
+    req.session.retorno = req.originalUrl;
+    req.flash('erro', 'Entre na sua conta para continuar.');
+    return res.redirect('/entrar');
+  }
+  return Usuario.findById(req.session.usuario.id).select('nome email perfil ativo aprovado').then(usuario=>{
+    if(!usuario?.ativo||!usuario.aprovado){
+      delete req.session.usuario;
+      req.flash('erro','Sua conta está inativa ou aguarda aprovação.');
+      return req.session.save(()=>res.redirect('/entrar'));
+    }
+    req.session.usuario={id:usuario.id,nome:usuario.nome,email:usuario.email,perfil:usuario.perfil};
+    return next();
+  }).catch(next);
 }
 
 export function perfisPermitidos(...perfis) {

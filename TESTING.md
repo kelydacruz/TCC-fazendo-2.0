@@ -76,13 +76,14 @@ Acesse [http://localhost:3001](http://localhost:3001). Verifique inicialmente:
 1. Abra **Entrar**.
 2. Na caixa amarela de desenvolvimento, clique em **Entrar como aluno**.
 3. Abra **Enviar TCC**.
-4. Preencha título, resumo, autores, palavras-chave, curso, turma, ano e área.
-5. Selecione **Professor de Teste** como orientador.
-6. Anexe um PDF válido, aceite o termo de autorização e escolha **Enviar para avaliação**.
-7. Confirme que o status passou para **Enviado**.
-8. Abra a trilha de aprendizagem e marque um módulo como concluído.
-9. Publique uma ideia, comente e salve um TCC ou uma ideia como favorito.
-10. Saia da conta.
+4. Confirme o curso e a turma exibidos no bloco de vínculo acadêmico. O aluno não consegue alterá-los.
+5. Preencha título, resumo, autores, palavras-chave, ano e área.
+6. Selecione **Professor de Teste** como orientador.
+7. Anexe um PDF válido, aceite o termo de autorização e escolha **Enviar para avaliação**.
+8. Confirme que o status passou para **Enviado**.
+9. Abra a trilha de aprendizagem e marque um módulo como concluído.
+10. Publique uma ideia, comente e salve um TCC ou uma ideia como favorito.
+11. Saia da conta.
 
 O aluno pode editar um rascunho ou um trabalho em **Correções solicitadas**, mas não pode aprovar nem publicar o próprio TCC.
 
@@ -111,11 +112,14 @@ Como professor:
 
 Como administrador, use o e-mail e a senha definidos em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Confira:
 
+- definição de curso e turma antes da aprovação de uma conta de aluno;
 - aprovação, ativação e perfil dos usuários;
 - cadastro de cursos e turmas;
 - edição dos módulos da trilha;
 - denúncias e configurações institucionais;
 - indicadores do painel administrativo.
+
+Cadastros sem relacionamentos podem ser excluídos. Cursos, turmas e usuários que já participam do histórico são desativados, evitando que TCCs publicados fiquem com informações quebradas.
 
 Um usuário não consegue escolher o perfil de administrador no cadastro.
 

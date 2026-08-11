@@ -48,11 +48,11 @@ export default class AuthController {
 
   async entrar(req, res) {
     const usuario = await Usuario.findOne({ email: String(req.body.email).toLowerCase() }).select('+senha');
-    if (!usuario || !await bcrypt.compare(req.body.senha || '', usuario.senha)) throw new Error('E-mail ou senha inválidos.');
-    if (usuario.perfil !== 'administrador' && perfilDoEmail(usuario.email) !== usuario.perfil) throw new Error('Este e-mail não pertence mais a um domínio institucional autorizado.');
-    if (!usuario.ativo) throw new Error('Esta conta está desativada.');
-    if (!usuario.emailConfirmado) throw new Error('Confirme seu e-mail antes de entrar.');
-    if (!usuario.aprovado) throw new Error('Sua conta ainda aguarda aprovação.');
+    if (!usuario || !await bcrypt.compare(req.body.senha || '', usuario.senha)) throw Object.assign(new Error('E-mail ou senha inválidos.'),{status:401});
+    if (usuario.perfil !== 'administrador' && perfilDoEmail(usuario.email) !== usuario.perfil) throw Object.assign(new Error('Este e-mail não pertence mais a um domínio institucional autorizado.'),{status:403});
+    if (!usuario.ativo) throw Object.assign(new Error('Esta conta está desativada.'),{status:403});
+    if (!usuario.emailConfirmado) throw Object.assign(new Error('Confirme seu e-mail antes de entrar.'),{status:403});
+    if (!usuario.aprovado) throw Object.assign(new Error('Sua conta ainda aguarda aprovação.'),{status:403});
     const retorno = req.session.retorno || '/painel';
     return req.session.regenerate(erro => {
       if (erro) return res.redirect('/entrar');

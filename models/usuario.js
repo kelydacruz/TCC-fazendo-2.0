@@ -5,6 +5,8 @@ const Usuario = new conexao.Schema({
   email: { type: String, required: true, unique: true, lowercase: true, trim: true },
   senha: { type: String, required: true, select: false },
   perfil: { type: String, enum: ['aluno', 'professor', 'administrador'], default: 'aluno' },
+  curso: { type: conexao.Schema.Types.ObjectId, ref: 'Curso' },
+  turma: { type: conexao.Schema.Types.ObjectId, ref: 'Turma' },
   aprovado: { type: Boolean, default: false },
   emailConfirmado: { type: Boolean, default: false },
   ativo: { type: Boolean, default: true },
