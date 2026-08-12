@@ -13,13 +13,12 @@
       <label>Conhecimentos<input name="conhecimentos" value="<%= ideia.conhecimentos.join(', ') %>"></label>
     </div>
     <% if(['professor','administrador'].includes(usuarioAtual.perfil)){ %>
-      <div class="subsecao moderacao-ideia" data-uso-ideia>
-        <h2>Uso da ideia</h2>
-        <p>Somente professores e administradores confirmam quando uma ideia foi reservada, está em desenvolvimento ou já foi utilizada.</p>
+      <div class="subsecao moderacao-ideia">
+        <h2>Moderação institucional</h2>
+        <p>Os alunos escolhem as ideias e atualizam o próprio andamento. Professores e administradores podem colocar a proposta em análise, devolvê-la como disponível ou arquivá-la.</p>
         <div class="form-grid">
-          <label>Status<select name="status" data-status-ideia><% statusIdeia.forEach(item=>{ %><option value="<%= item %>" <%= ideia.status===item?'selected':'' %>><%= item %></option><% }) %></select></label>
-          <label>Usuário responsável<select name="responsavelUso"><option value="">Nenhum</option><% usuariosUso.forEach(item=>{ %><option value="<%= item.id %>" <%= String(ideia.responsavelUso||'')===item.id?'selected':'' %>><%= item.nome %> · <%= item.perfil %></option><% }) %></select><small>Obrigatório para ideias reservadas, em desenvolvimento ou utilizadas.</small></label>
-          <label class="span-2">TCC desenvolvido a partir da ideia<select name="tccVinculado"><option value="">Nenhum TCC vinculado</option><% tccs.forEach(item=>{ %><option value="<%= item.id %>" <%= String(ideia.tccVinculado||'')===item.id?'selected':'' %>><%= item.titulo %></option><% }) %></select><small>Este vínculo é exibido quando o status estiver como “Utilizada”.</small></label>
+          <label>Status<select name="status"><% statusModeracao.forEach(item=>{ %><option value="<%= item %>" <%= ideia.status===item?'selected':'' %>><%= item %></option><% }) %></select><small>Status de uso como “Reservada” e “Em desenvolvimento” são controlados pelo aluno responsável.</small></label>
+          <% if(ideia.status==='Utilizada'){ %><label>TCC desenvolvido a partir da ideia<select name="tccVinculado"><option value="">Nenhum TCC vinculado</option><% tccs.forEach(item=>{ %><option value="<%= item.id %>" <%= String(ideia.tccVinculado||'')===item.id?'selected':'' %>><%= item.titulo %></option><% }) %></select><small>Depois que o aluno marcar como utilizada, vincule o TCC publicado correspondente.</small></label><% } %>
         </div>
       </div>
     <% } %>

@@ -13,7 +13,7 @@ Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Con
 - termo de autorização do aluno, opção de preservar a autoria e histórico com responsável e data;
 - upload de PDF e capa no MongoDB com validação e limite de tamanho;
 - catálogo público com pesquisa, filtros combinados, visualizações e downloads;
-- Banco de Ideias restrito a usuários autenticados, com status alterados somente por professores e administradores, usuário responsável e vínculo ao TCC desenvolvido, além de favoritos, comentários, denúncias e moderação;
+- Banco de Ideias restrito a usuários autenticados, no qual o aluno escolhe uma proposta e atualiza seu andamento com reserva exclusiva; professores e administradores cuidam da análise, do arquivamento e do vínculo com o TCC desenvolvido;
 - trilha de aprendizagem com 11 módulos e progresso individual;
 - gestão de usuários, cursos, turmas, módulos, denúncias e configurações;
 - administração compacta com exclusão segura ou desativação de registros vinculados;

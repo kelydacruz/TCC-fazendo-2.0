@@ -4,6 +4,7 @@ import ejs from 'ejs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { descricaoUsoIdeia } from '../utils/usoIdeia.js';
+import { acoesIdeiaAluno } from '../utils/fluxoIdeia.js';
 import { STATUS_IDEIA } from '../models/ideia.js';
 
 const raiz=dirname(fileURLToPath(import.meta.url));
@@ -37,22 +38,32 @@ test('lista de TCC restringe o botão de envio ao aluno',async()=>{
 
 test('ideia em desenvolvimento exibe quem está utilizando',async()=>{
   const ideia={id:'ideia-1',titulo:'Automação da biblioteca',descricao:'Projeto para organizar empréstimos.',problema:'Controle manual.',curso:{nome:'Técnico em Informática'},area:'Sistemas',dificuldade:'Intermediária',conhecimentos:['Web'],autor:{_id:'autor-1',nome:'Ana',perfil:'aluno'},status:'Em desenvolvimento',responsavelUso:{_id:'aluno-2',nome:'Bruno',perfil:'aluno'},createdAt:new Date('2026-08-01')};
-  const html=await renderizar('ideia/detalhes.ejs',{title:ideia.titulo,caminhoAtual:'/ideias/ideia-1',usuarioAtual:{id:'aluno-3',nome:'Carla',perfil:'aluno'},ideia,comentarios:[],favorito:false,descricaoUso:descricaoUsoIdeia(ideia)});
+  const html=await renderizar('ideia/detalhes.ejs',{title:ideia.titulo,caminhoAtual:'/ideias/ideia-1',usuarioAtual:{id:'aluno-3',nome:'Carla',perfil:'aluno'},ideia,comentarios:[],favorito:false,descricaoUso:descricaoUsoIdeia(ideia),acoesAluno:[],alunoResponsavel:false});
   assert.match(html,/Em desenvolvimento por Bruno/);
   assert.match(html,/Responsável: <strong>Bruno<\/strong>/);
+  assert.doesNotMatch(html,/Iniciar desenvolvimento/);
+});
+
+test('aluno pode escolher uma ideia disponível',async()=>{
+  const aluno={id:'aluno-1',nome:'Aluno Teste',perfil:'aluno'};
+  const ideia={id:'ideia-1',titulo:'Automação da biblioteca',descricao:'Projeto para organizar empréstimos.',problema:'Controle manual.',curso:{nome:'Técnico em Informática'},area:'Sistemas',dificuldade:'Intermediária',conhecimentos:['Web'],autor:{_id:'autor-1',nome:'Ana',perfil:'aluno'},status:'Disponível',createdAt:new Date('2026-08-01')};
+  const html=await renderizar('ideia/detalhes.ejs',{title:ideia.titulo,caminhoAtual:'/ideias/ideia-1',usuarioAtual:aluno,ideia,comentarios:[],favorito:false,descricaoUso:descricaoUsoIdeia(ideia),acoesAluno:acoesIdeiaAluno(ideia,aluno),alunoResponsavel:false});
+  assert.match(html,/Quer desenvolver esta ideia?/);
+  assert.match(html,/Escolher esta ideia/);
+  assert.match(html,/name="acao" value="reservar"/);
 });
 
 test('Banco de Ideias explica quem pode alterar os status',async()=>{
   const html=await renderizar('ideia/lst.ejs',{title:'Banco de Ideias',caminhoAtual:'/ideias',usuarioAtual:{id:'aluno-1',nome:'Aluno Teste',perfil:'aluno'},ideias:[],cursos:[],areas:[],statusIdeia:STATUS_IDEIA,query:{},descricaoUsoIdeia});
   assert.match(html,/Como funcionam os status das ideias/);
-  assert.match(html,/somente professores e administradores/);
-  assert.match(html,/Alterar status e moderar/);
+  assert.match(html,/o próprio aluno escolhe/);
+  assert.match(html,/Professores e administradores cuidam apenas/);
 });
 
-test('moderação de ideia permite definir status, responsável e TCC utilizado',async()=>{
+test('moderação institucional não escolhe responsável e pode vincular o TCC utilizado',async()=>{
   const ideia={id:'ideia-1',titulo:'Automação da biblioteca',descricao:'Projeto para organizar empréstimos.',problema:'Controle manual.',curso:'curso-1',area:'Sistemas',dificuldade:'Intermediária',conhecimentos:['Web'],autor:'autor-1',status:'Utilizada',responsavelUso:'aluno-2',tccVinculado:'tcc-1'};
-  const html=await renderizar('ideia/edt.ejs',{title:'Editar ideia',caminhoAtual:'/ideias/ideia-1/editar',usuarioAtual:{id:'prof-1',nome:'Professor Teste',perfil:'professor'},ideia,cursos:[{id:'curso-1',nome:'Técnico em Informática'}],usuariosUso:[{id:'aluno-2',nome:'Bruno',perfil:'aluno'}],tccs:[{id:'tcc-1',titulo:'Biblioteca inteligente'}],statusIdeia:STATUS_IDEIA});
-  assert.match(html,/name="responsavelUso"/);
-  assert.match(html,/Bruno · aluno/);
+  const html=await renderizar('ideia/edt.ejs',{title:'Editar ideia',caminhoAtual:'/ideias/ideia-1/editar',usuarioAtual:{id:'prof-1',nome:'Professor Teste',perfil:'professor'},ideia,cursos:[{id:'curso-1',nome:'Técnico em Informática'}],tccs:[{id:'tcc-1',titulo:'Biblioteca inteligente'}],statusModeracao:['Utilizada','Disponível','Em análise','Arquivada']});
+  assert.match(html,/Os alunos escolhem as ideias/);
+  assert.doesNotMatch(html,/name="responsavelUso"/);
   assert.match(html,/TCC desenvolvido a partir da ideia/);
 });

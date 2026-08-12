@@ -134,14 +134,21 @@ Para testar as correções, entre novamente como aluno, abra o trabalho devolvid
 
 ## 8. Testar moderação e administração
 
+Como aluno:
+
+1. Abra uma ideia **Disponível** e clique em **Escolher esta ideia**;
+2. confirme que o status mudou para **Reservada** e que seu nome aparece como responsável;
+3. use **Iniciar desenvolvimento** para mudar o status;
+4. teste **Liberar para outro aluno** ou avance até **Marcar como utilizada**;
+5. confirme que outro aluno não recebe botões para alterar uma ideia já escolhida.
+
 Como professor:
 
-1. Abra uma ideia e use **Alterar status e moderar**;
-2. marque-a como **Reservada** ou **Em desenvolvimento** e escolha o aluno ou professor responsável;
-3. marque-a como **Utilizada** e, se houver, vincule o TCC publicado que nasceu da proposta;
-4. volte à lista e aos detalhes da ideia para conferir a indicação de livre, em uso ou já utilizada;
-5. em um comentário, use **Ocultar como moderador**;
-6. confira os itens de revisão e denúncias no painel.
+1. Abra uma ideia e use **Revisar e moderar**;
+2. confira que a escolha do responsável e os status de uso pertencem ao aluno;
+3. use **Em análise**, **Disponível** ou **Arquivada** quando houver necessidade institucional;
+4. depois que o aluno marcar a ideia como **Utilizada**, vincule o TCC publicado que nasceu da proposta;
+5. em um comentário, use **Ocultar como moderador** e confira os itens de revisão e denúncias no painel.
 
 Como administrador, use o e-mail e a senha definidos em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Confira:
 
