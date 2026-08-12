@@ -6,13 +6,18 @@ const TRANSICOES_PROFESSOR = {
 };
 
 export function acoesAvaliacao(status, perfil) {
-  const acoes = [...(TRANSICOES_PROFESSOR[status] || [])];
+  if (!['professor','administrador'].includes(perfil)) return [];
+  const acoes = [...(TRANSICOES_PROFESSOR[status] || [])].filter(acao=>perfil!=='administrador'||acao!=='Publicado');
   if (perfil === 'administrador' && status !== 'Arquivado' && !acoes.includes('Arquivado')) acoes.push('Arquivado');
   return acoes;
 }
 
 export function validarTransicao(statusAtual, novoStatus, perfil) {
   return acoesAvaliacao(statusAtual, perfil).includes(novoStatus);
+}
+
+export function visivelParaProfessor(status) {
+  return status !== 'Rascunho';
 }
 
 export function descricaoStatus(status) {

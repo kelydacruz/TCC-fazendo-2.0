@@ -3,6 +3,7 @@ import Tcc from '../models/tcc.js';
 import Ideia from '../models/ideia.js';
 import Comentario from '../models/comentario.js';
 import Denuncia from '../models/denuncia.js';
+import { descricaoUsoIdeia } from '../utils/usoIdeia.js';
 
 function falha(mensagem,status=400){return Object.assign(new Error(mensagem),{status});}
 
@@ -12,24 +13,13 @@ export default class PainelController {
     let dados={};
 
     if(usuario.perfil==='aluno'){
-      const conta=await Usuario.findById(usuario.id).select('favoritosTcc favoritosIdeia progressoModulos');
-      const [favoritosTcc,favoritosIdeia]=await Promise.all([
-        Tcc.countDocuments({_id:{$in:conta?.favoritosTcc||[]},status:'Publicado'}),
-        Ideia.countDocuments({_id:{$in:conta?.favoritosIdeia||[]},status:{$ne:'Arquivada'}})
-      ]);
-      dados={
-        tccsEnviados:await Tcc.countDocuments({alunoResponsavel:usuario.id}),
-        correcoesSolicitadas:await Tcc.countDocuments({alunoResponsavel:usuario.id,status:'Correções solicitadas'}),
-        ideiasPublicadas:await Ideia.countDocuments({autor:usuario.id}),
-        favoritos:favoritosTcc+favoritosIdeia,
-        modulosConcluidos:conta?.progressoModulos.length||0
-      };
+      dados={};
     }else if(usuario.perfil==='professor'){
       dados={
         aguardandoRevisao:await Tcc.countDocuments({orientador:usuario.id,status:{$in:['Enviado','Reenviado','Aguardando revisão']}}),
         aguardandoLiberacao:await Tcc.countDocuments({orientador:usuario.id,status:'Aprovado'}),
         trabalhosAvaliados:await Tcc.countDocuments({orientador:usuario.id,status:{$in:['Correções solicitadas','Aprovado','Publicado']} }),
-        trabalhosOrientados:await Tcc.countDocuments({orientador:usuario.id}),
+        trabalhosOrientados:await Tcc.countDocuments({orientador:usuario.id,status:{$ne:'Rascunho'}}),
         ideiasEmAnalise:await Ideia.countDocuments({status:'Em análise'}),
         denunciasPendentes:await Denuncia.countDocuments({status:'Pendente'})
       };
@@ -52,9 +42,9 @@ export default class PainelController {
     if(!conta)throw falha('Sua conta não foi encontrada.',404);
     const [tccs,ideias]=await Promise.all([
       Tcc.find({_id:{$in:conta.favoritosTcc},status:'Publicado'}).select('-pdf.dados -capa.dados').populate('curso orientador').sort({titulo:1}),
-      Ideia.find({_id:{$in:conta.favoritosIdeia},status:{$ne:'Arquivada'}}).populate('curso autor').sort({titulo:1})
+      Ideia.find({_id:{$in:conta.favoritosIdeia},status:{$ne:'Arquivada'}}).populate('curso autor responsavelUso').sort({titulo:1})
     ]);
-    res.render('painel/favoritos',{title:'Meus favoritos',tccs,ideias});
+    res.render('painel/favoritos',{title:'Meus favoritos',tccs,ideias,descricaoUsoIdeia});
   };
 
   favoritoTcc = async(req,res) => {

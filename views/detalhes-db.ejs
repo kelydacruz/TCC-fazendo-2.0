@@ -12,7 +12,7 @@
   <article>
     <h2>Resumo</h2><p class="resumo"><%= tcc.resumo %></p>
     <h2>Informações do trabalho</h2>
-    <dl class="info-grid"><div><dt>Curso</dt><dd><%= tcc.curso?.nome||'-' %></dd></div><div><dt>Turma</dt><dd><%= tcc.turma?.nome||'-' %></dd></div><div><dt>Ano</dt><dd><%= tcc.ano %></dd></div><div><dt>Área</dt><dd><%= tcc.area %></dd></div><div><dt>Publicação</dt><dd><%= tcc.publicadoEm?new Date(tcc.publicadoEm).toLocaleDateString('pt-BR'):'-' %></dd></div><div><dt>Status</dt><dd><span class="status disponivel">Publicado pelo orientador</span></dd></div></dl>
+    <dl class="info-grid"><div><dt>Curso</dt><dd><%= tcc.curso?.nome||'-' %></dd></div><div><dt>Turma</dt><dd><%= tcc.turma?.nome||'-' %></dd></div><div><dt>Ano</dt><dd><%= tcc.ano %></dd></div><div><dt>Área</dt><dd><%= tcc.area %></dd></div><div><dt>Publicação</dt><dd><%= tcc.publicadoEm?new Date(tcc.publicadoEm).toLocaleDateString('pt-BR'):'-' %></dd></div><div><dt>Status</dt><dd><span class="status disponivel">Liberado pelo orientador</span></dd></div></dl>
   </article>
   <aside class="download-box">
     <div class="pdf-icon"><i class="fa-regular fa-file-pdf"></i></div>

@@ -39,7 +39,7 @@ export default class AdminController {
   delUsuario = async(req,res)=>{
     if(req.params.id===req.session.usuario.id)throw falha('Você não pode excluir sua própria conta administrativa.');
     const usuario=await Usuario.findById(req.params.id);if(!usuario)throw falha('Usuário não encontrado.',404);
-    const [tccs,ideias,comentarios,denuncias]=await Promise.all([Tcc.countDocuments({$or:[{alunoResponsavel:usuario.id},{orientador:usuario.id}]}),Ideia.countDocuments({autor:usuario.id}),Comentario.countDocuments({autor:usuario.id}),Denuncia.countDocuments({denunciante:usuario.id})]);
+    const [tccs,ideias,comentarios,denuncias]=await Promise.all([Tcc.countDocuments({$or:[{alunoResponsavel:usuario.id},{orientador:usuario.id}]}),Ideia.countDocuments({$or:[{autor:usuario.id},{responsavelUso:usuario.id}]}),Comentario.countDocuments({autor:usuario.id}),Denuncia.countDocuments({denunciante:usuario.id})]);
     if(tccs+ideias+comentarios+denuncias){await Usuario.findByIdAndUpdate(usuario.id,{ativo:false,aprovado:false});req.flash('sucesso','O usuário possui conteúdo vinculado e foi desativado para preservar o histórico.');}
     else{await usuario.deleteOne();req.flash('sucesso','Usuário excluído.');}
     res.redirect('/admin/usuarios');

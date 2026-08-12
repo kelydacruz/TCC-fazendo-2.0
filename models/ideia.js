@@ -10,6 +10,7 @@ const Ideia = new conexao.Schema({
   conhecimentos: [{ type: String, trim: true }],
   autor: { type: conexao.Schema.Types.ObjectId, ref: 'Usuario', required: true },
   status: { type: String, enum: STATUS_IDEIA, default: 'Disponível' },
+  responsavelUso: { type: conexao.Schema.Types.ObjectId, ref: 'Usuario' },
   tccVinculado: { type: conexao.Schema.Types.ObjectId, ref: 'Tcc' },
   moderada: { type: Boolean, default: false }
 }, { timestamps: true });

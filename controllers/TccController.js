@@ -4,8 +4,9 @@ import Turma from '../models/turma.js';
 import Usuario from '../models/usuario.js';
 import { ehDono, lista, regexSegura } from '../utils/texto.js';
 import Configuracao from '../models/configuracao.js';
-import { acoesAvaliacao, descricaoStatus, validarTransicao } from '../utils/fluxoTcc.js';
-import { alunoPodeEnviarPara } from '../utils/vinculoAcademico.js';
+import Ideia from '../models/ideia.js';
+import { acoesAvaliacao, descricaoStatus, validarTransicao, visivelParaProfessor } from '../utils/fluxoTcc.js';
+import { alunoPodeEnviarPara, podeEnviarTcc } from '../utils/vinculoAcademico.js';
 import { bancoDisponivel } from '../config/conexao.js';
 import { registrarVisualizacao } from '../utils/metricasTcc.js';
 
@@ -42,6 +43,7 @@ export default class TccController {
   constructor(caminhoBase = 'tcc/') { this.caminhoBase = caminhoBase; }
 
   openAdd = async (req, res) => {
+    if(!podeEnviarTcc(req.session.usuario))throw falha('Somente alunos podem enviar TCCs.',403);
     const {cursos,turmas,professores,vinculoAluno}=await opcoesFormulario(req);
     res.render(this.caminhoBase + 'add', { title:'Enviar TCC', cursos, turmas, professores, tcc:null, vinculoAluno });
   };
@@ -52,6 +54,7 @@ export default class TccController {
     const status = req.body.acao === 'enviar' ? 'Enviado' : 'Rascunho';
     const conta=await Usuario.findById(req.session.usuario.id).select('perfil curso turma');
     if(!conta)throw falha('Sua conta não foi encontrada.',401);
+    if(!podeEnviarTcc(conta))throw falha('Somente alunos podem enviar TCCs.',403);
     if(!alunoPodeEnviarPara(conta,req.body.curso,req.body.turma))throw falha('Alunos só podem enviar TCC para o curso e a turma vinculados à sua conta.',403);
     await Promise.all([validarCursoTurma(req.body.curso,req.body.turma,true),validarOrientador(req.body.orientador)]);
     if (!lista(req.body.autores).length) throw new Error('Informe pelo menos um autor.');
@@ -73,7 +76,7 @@ export default class TccController {
 
   list = async (req, res) => {
     const usuario = req.session.usuario;
-    const filtro = usuario.perfil === 'administrador' ? {} : usuario.perfil === 'professor' ? { orientador:usuario.id } : { alunoResponsavel:usuario.id };
+    const filtro = usuario.perfil === 'administrador' ? {} : usuario.perfil === 'professor' ? { orientador:usuario.id, status:{$ne:'Rascunho'} } : { alunoResponsavel:usuario.id };
     const tccs = await Tcc.find(filtro).populate('curso turma orientador alunoResponsavel').sort({ updatedAt:-1 });
     res.render(this.caminhoBase + 'lst', { title:'Meus TCCs', tccs });
   };
@@ -84,6 +87,7 @@ export default class TccController {
     const usuario = req.session.usuario;
     const acessoProfessor = usuario.perfil === 'professor' && ehDono(tcc.orientador, usuario);
     const acessoAdmin = usuario.perfil === 'administrador';
+    if (acessoProfessor && !visivelParaProfessor(tcc.status)) throw Object.assign(new Error('O aluno ainda não enviou este rascunho para avaliação.'), { status:403 });
     if (!ehDono(tcc.alunoResponsavel, usuario) && !acessoProfessor && !acessoAdmin) throw Object.assign(new Error('Acesso negado.'), { status:403 });
     const {cursos,turmas,professores,vinculoAluno}=await opcoesFormulario(req,tcc);
     res.render(this.caminhoBase + 'edt', { title:'Editar TCC', tcc, cursos, turmas, professores, vinculoAluno, editavel:ehDono(tcc.alunoResponsavel, usuario) && ['Rascunho','Correções solicitadas'].includes(tcc.status), acoesAvaliacao:acoesAvaliacao(tcc.status,usuario.perfil), descricaoStatus:descricaoStatus(tcc.status) });
@@ -128,7 +132,7 @@ export default class TccController {
     const tcc = await Tcc.findById(req.params.id);
     if (!tcc || (!ehDono(tcc.alunoResponsavel, req.session.usuario) && req.session.usuario.perfil !== 'administrador')) throw Object.assign(new Error('Acesso negado.'), { status:403 });
     if (req.session.usuario.perfil !== 'administrador' && tcc.status !== 'Rascunho') throw new Error('Somente rascunhos podem ser excluídos.');
-    await Promise.all([tcc.deleteOne(),Usuario.updateMany({},{$pull:{favoritosTcc:tcc.id}})]); req.flash('sucesso','TCC excluído.'); res.redirect('/tcc/lst');
+    await Promise.all([tcc.deleteOne(),Usuario.updateMany({},{$pull:{favoritosTcc:tcc.id}}),Ideia.updateMany({tccVinculado:tcc.id},{$unset:{tccVinculado:1}})]); req.flash('sucesso','TCC excluído.'); res.redirect('/tcc/lst');
   };
 
   catalogo = async (req, res) => {

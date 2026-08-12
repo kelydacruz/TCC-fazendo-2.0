@@ -109,19 +109,20 @@ Agora teste como aluno:
 8. Confirme que o status passou para **Enviado**.
 9. Abra a trilha de aprendizagem e marque um módulo como concluído.
 10. Publique uma ideia, comente e salve um TCC ou uma ideia como favorito;
-11. volte ao painel e abra **Meus favoritos** para conferir e remover os itens salvos.
-11. Saia da conta.
+11. volte ao painel e abra **Meus favoritos** para conferir e remover os itens salvos;
+12. confirme que o painel do aluno mostra apenas os atalhos, sem o bloco **Visão geral**;
+13. saia da conta.
 
-O aluno pode editar um rascunho ou um trabalho em **Correções solicitadas**, mas não pode aprovar nem publicar o próprio TCC.
+O aluno pode editar um rascunho ou um trabalho em **Correções solicitadas**, mas não pode aprovar nem liberar o próprio TCC. Professor e administrador não possuem botão nem permissão para criar um envio.
 
 ## 7. Testar como professor e liberar para o site
 
 1. Entre novamente e clique em **Entrar como professor**.
-2. No painel, confira **Aguardando revisão**.
+2. No painel, confira a **Visão geral** e **Aguardando revisão**. Confirme também que não existe botão para enviar um TCC.
 3. Abra o trabalho enviado pelo aluno. Somente trabalhos orientados por esse professor ficam disponíveis para ele.
 4. Escolha **Aguardando revisão** para registrar o início da análise.
 5. Escolha **Correções solicitadas** e escreva uma observação para testar a devolução ao aluno; ou escolha **Aprovado** para concluir a avaliação.
-6. Quando o TCC estiver **Aprovado**, abra-o novamente. A ação **Publicado — liberar para o site** aparecerá separadamente.
+6. Quando o TCC estiver **Aprovado**, abra-o novamente. A ação **Liberar para o site** aparecerá separadamente.
 7. Confirme a liberação. O histórico deve registrar o professor, a data e a observação.
 8. Saia da conta e procure o título no catálogo público.
 
@@ -134,8 +135,11 @@ Para testar as correções, entre novamente como aluno, abra o trabalho devolvid
 Como professor:
 
 1. Abra uma ideia e altere seu status em **Editar/Moderar**;
-2. em um comentário, use **Ocultar como moderador**;
-3. confira os itens de revisão e denúncias no painel.
+2. marque-a como **Reservada** ou **Em desenvolvimento** e escolha o aluno ou professor responsável;
+3. marque-a como **Utilizada** e, se houver, vincule o TCC publicado que nasceu da proposta;
+4. volte à lista e aos detalhes da ideia para conferir a indicação de livre, em uso ou já utilizada;
+5. em um comentário, use **Ocultar como moderador**;
+6. confira os itens de revisão e denúncias no painel.
 
 Como administrador, use o e-mail e a senha definidos em `ADMIN_EMAIL` e `ADMIN_PASSWORD`. Confira:
 
@@ -145,6 +149,8 @@ Como administrador, use o e-mail e a senha definidos em `ADMIN_EMAIL` e `ADMIN_P
 - edição dos módulos da trilha;
 - denúncias e configurações institucionais;
 - indicadores do painel administrativo.
+
+O administrador vê a **Visão geral** e gerencia os TCCs existentes, mas não cria envios e não executa a liberação final para o catálogo; essa confirmação pertence ao professor orientador.
 
 Cadastros sem relacionamentos podem ser excluídos. Cursos, turmas e usuários que já participam do histórico são desativados, evitando que TCCs publicados fiquem com informações quebradas.
 

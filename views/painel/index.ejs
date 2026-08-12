@@ -13,16 +13,26 @@
     <div class="admin-resumo"><% ['totalUsuarios','publicados','aguardandoAprovacao','denunciasPendentes'].forEach(chave=>{ %><article><span><%= rotulos[chave] %></span><strong><%= dados[chave]||0 %></strong></article><% }) %></div>
     <details class="admin-indicadores"><summary>Ver todos os indicadores <i class="fa-solid fa-chevron-down"></i></summary><div class="indicadores-lista"><% Object.entries(dados).filter(([chave,valor])=>typeof valor==='number'&&!['totalUsuarios','publicados','aguardandoAprovacao','denunciasPendentes'].includes(chave)).forEach(([chave,valor])=>{ %><span><%= rotulos[chave]||chave %><strong><%= valor %></strong></span><% }) %></div></details>
   </section>
-<% }else{ %>
+<% }else if(usuarioAtual.perfil==='professor'){ %>
   <section class="secao container">
     <div class="atalhos">
-      <a href="/tcc/lst"><i class="fa-regular fa-file-lines"></i><span><strong>Meus TCCs</strong>Acompanhar e revisar</span></a>
+      <a href="/tcc/lst"><i class="fa-regular fa-file-lines"></i><span><strong>TCCs orientados</strong>Avaliar trabalhos dos alunos</span></a>
       <a href="/favoritos"><i class="fa-regular fa-bookmark"></i><span><strong>Meus favoritos</strong>TCCs e ideias salvos</span></a>
       <a href="/ideias"><i class="fa-regular fa-lightbulb"></i><span><strong>Banco de Ideias</strong>Publicar e colaborar</span></a>
       <a href="/aprender"><i class="fa-solid fa-route"></i><span><strong>Trilha</strong>Continuar aprendendo</span></a>
     </div>
     <h2>Visão geral</h2>
     <div class="painel-cards"><% Object.entries(dados).filter(([,valor])=>typeof valor==='number').forEach(([chave,valor])=>{ %><article><i class="fa-solid fa-chart-simple"></i><span><strong><%= valor %></strong><%= rotulos[chave]||chave %></span></article><% }) %></div>
+  </section>
+<% }else{ %>
+  <section class="secao container">
+    <div class="secao-titulo"><div><span class="eyebrow">Acesso rápido</span><h2>O que você deseja fazer?</h2><p>Envie seu trabalho, acompanhe avaliações e continue seus estudos.</p></div></div>
+    <div class="atalhos">
+      <a href="/tcc/add"><i class="fa-solid fa-file-arrow-up"></i><span><strong>Enviar TCC</strong>Criar rascunho ou enviar para avaliação</span></a>
+      <a href="/tcc/lst"><i class="fa-regular fa-file-lines"></i><span><strong>Meus envios</strong>Acompanhar status e correções</span></a>
+      <a href="/favoritos"><i class="fa-regular fa-bookmark"></i><span><strong>Meus favoritos</strong>TCCs e ideias salvos</span></a>
+      <a href="/aprender"><i class="fa-solid fa-route"></i><span><strong>Trilha</strong>Continuar aprendendo</span></a>
+    </div>
   </section>
 <% } %>
 <%- include('../partials/footer') %>

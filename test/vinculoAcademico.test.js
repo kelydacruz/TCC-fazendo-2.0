@@ -1,6 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { alunoPodeEnviarPara, turmaPertenceAoCurso } from '../utils/vinculoAcademico.js';
+import { alunoPodeEnviarPara, podeEnviarTcc, turmaPertenceAoCurso } from '../utils/vinculoAcademico.js';
+
+test('somente aluno pode iniciar o envio de um TCC',()=>{
+  assert.equal(podeEnviarTcc({perfil:'aluno'}),true);
+  assert.equal(podeEnviarTcc({perfil:'professor'}),false);
+  assert.equal(podeEnviarTcc({perfil:'administrador'}),false);
+});
 
 test('aluno só pode enviar TCC para seu próprio curso e turma',()=>{
   const aluno={perfil:'aluno',curso:'curso-1',turma:'turma-1'};
