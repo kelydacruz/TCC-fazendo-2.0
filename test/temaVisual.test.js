@@ -9,8 +9,9 @@ test('banner permite que a barra de pesquisa interna apareça inteira',()=>{
   assert.match(css,/\.busca-interna\s*\{[^}]*position:\s*relative[^}]*z-index:\s*4/s);
 });
 
-test('tema usa a paleta acadêmica clara atualizada',()=>{
-  assert.match(css,/--primaria:\s*#85658f/);
-  assert.match(css,/--primaria-escura:\s*#684a70/);
-  assert.match(css,/linear-gradient\(135deg, #eee6f0, #d6c4db\)/);
+test('tema usa a paleta roxa acadêmica com degradê',()=>{
+  assert.match(css,/--primaria:\s*#6d28d9/);
+  assert.match(css,/--primaria-escura:\s*#3b1d6b/);
+  assert.match(css,/--primaria-clara:\s*#f1ebff/);
+  assert.match(css,/linear-gradient\(135deg, #3b1d6b, #6d28d9\)/);
 });
