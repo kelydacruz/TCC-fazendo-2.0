@@ -15,3 +15,8 @@ test('tema usa a paleta roxa acadêmica com degradê',()=>{
   assert.match(css,/--primaria-clara:\s*#f1ebff/);
   assert.match(css,/linear-gradient\(135deg, #3b1d6b, #6d28d9\)/);
 });
+
+test('banner do Banco de Ideias mantém fundo roxo e texto legível',()=>{
+  assert.match(css,/\.page-hero\.ideias-hero\s*\{[^}]*linear-gradient\(135deg, #3b1d6b, #6d28d9\)/s);
+  assert.match(css,/\.page-hero\.ideias-hero h1\s*\{[^}]*color:\s*#fff/s);
+});

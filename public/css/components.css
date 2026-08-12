@@ -300,7 +300,7 @@ summary:focus-visible {
 }
 
 .chamada-azul,
-.ideias-hero {
+.page-hero.ideias-hero {
   background:
     radial-gradient(circle at 90% 10%, rgba(255, 255, 255, .14), transparent 28%),
     linear-gradient(135deg, #3b1d6b, #6d28d9);
@@ -308,12 +308,12 @@ summary:focus-visible {
 }
 
 .chamada-azul .eyebrow,
-.ideias-hero .eyebrow {
+.page-hero.ideias-hero .eyebrow {
   color: #eadfff;
 }
 
 .chamada-azul p,
-.ideias-hero p {
+.page-hero.ideias-hero p {
   color: #e4d8ff;
 }
 
@@ -367,13 +367,13 @@ summary:focus-visible {
   pointer-events: none;
 }
 
-.ideias-hero h1,
-.ideias-hero p {
+.page-hero.ideias-hero h1,
+.page-hero.ideias-hero p {
   position: relative;
   z-index: 1;
 }
 
-.ideias-hero h1 {
+.page-hero.ideias-hero h1 {
   color: #fff;
 }
 
