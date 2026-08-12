@@ -87,8 +87,10 @@ Acesse [http://localhost:3001](http://localhost:3001). Verifique inicialmente:
 2. catálogo de TCCs e combinação dos filtros;
 3. detalhe de um trabalho, contador de visualizações e download do PDF;
 4. seção **Aprenda a fazer seu TCC**, seus 11 módulos e materiais;
-5. Banco de Ideias, filtros, detalhes e comentários;
+5. depois de entrar, Banco de Ideias, filtros, detalhes e comentários;
 6. layout em largura de celular nas ferramentas de desenvolvedor do navegador.
+
+Sem autenticação, o menu e a página inicial não exibem o Banco de Ideias. A tentativa de abrir `/ideias` diretamente deve levar à tela de login; o catálogo de TCCs continua público.
 
 ## 6. Preparar e testar as contas rápidas
 
@@ -134,7 +136,7 @@ Para testar as correções, entre novamente como aluno, abra o trabalho devolvid
 
 Como professor:
 
-1. Abra uma ideia e altere seu status em **Editar/Moderar**;
+1. Abra uma ideia e use **Alterar status e moderar**;
 2. marque-a como **Reservada** ou **Em desenvolvimento** e escolha o aluno ou professor responsável;
 3. marque-a como **Utilizada** e, se houver, vincule o TCC publicado que nasceu da proposta;
 4. volte à lista e aos detalhes da ideia para conferir a indicação de livre, em uso ou já utilizada;

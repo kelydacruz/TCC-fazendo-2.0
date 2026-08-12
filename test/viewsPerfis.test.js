@@ -37,9 +37,16 @@ test('lista de TCC restringe o botão de envio ao aluno',async()=>{
 
 test('ideia em desenvolvimento exibe quem está utilizando',async()=>{
   const ideia={id:'ideia-1',titulo:'Automação da biblioteca',descricao:'Projeto para organizar empréstimos.',problema:'Controle manual.',curso:{nome:'Técnico em Informática'},area:'Sistemas',dificuldade:'Intermediária',conhecimentos:['Web'],autor:{_id:'autor-1',nome:'Ana',perfil:'aluno'},status:'Em desenvolvimento',responsavelUso:{_id:'aluno-2',nome:'Bruno',perfil:'aluno'},createdAt:new Date('2026-08-01')};
-  const html=await renderizar('ideia/detalhes.ejs',{title:ideia.titulo,caminhoAtual:'/ideias/ideia-1',usuarioAtual:null,ideia,comentarios:[],favorito:false,descricaoUso:descricaoUsoIdeia(ideia)});
+  const html=await renderizar('ideia/detalhes.ejs',{title:ideia.titulo,caminhoAtual:'/ideias/ideia-1',usuarioAtual:{id:'aluno-3',nome:'Carla',perfil:'aluno'},ideia,comentarios:[],favorito:false,descricaoUso:descricaoUsoIdeia(ideia)});
   assert.match(html,/Em desenvolvimento por Bruno/);
   assert.match(html,/Responsável: <strong>Bruno<\/strong>/);
+});
+
+test('Banco de Ideias explica quem pode alterar os status',async()=>{
+  const html=await renderizar('ideia/lst.ejs',{title:'Banco de Ideias',caminhoAtual:'/ideias',usuarioAtual:{id:'aluno-1',nome:'Aluno Teste',perfil:'aluno'},ideias:[],cursos:[],areas:[],statusIdeia:STATUS_IDEIA,query:{},descricaoUsoIdeia});
+  assert.match(html,/Como funcionam os status das ideias/);
+  assert.match(html,/somente professores e administradores/);
+  assert.match(html,/Alterar status e moderar/);
 });
 
 test('moderação de ideia permite definir status, responsável e TCC utilizado',async()=>{

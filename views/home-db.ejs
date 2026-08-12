@@ -4,11 +4,11 @@
     <div>
       <span class="eyebrow">Conhecimento que transforma</span>
       <h1>Conhecimento que inspira <em>novos projetos</em></h1>
-      <p>Explore trabalhos, encontre referências e descubra ideias para construir o próximo grande projeto.</p>
+      <p>Explore trabalhos, encontre referências e descubra caminhos para construir o próximo grande projeto.</p>
       <form class="busca" action="/tccs"><i class="fa-solid fa-magnifying-glass"></i><input name="q" aria-label="Pesquisar" placeholder="Título, autor, orientador, tema ou palavra-chave"><button>Pesquisar</button></form>
       <% if(cursos.length||anos.length||areas.length){ %><div class="filtros-rapidos"><span>Filtrar rapidamente:</span><% cursos.slice(0,2).forEach(curso=>{ %><a href="/tccs?curso=<%= curso.id %>"><%= curso.sigla %></a><% }) %><% if(anos[0]){ %><a href="/tccs?ano=<%= anos[0] %>"><%= anos[0] %></a><% } %><% if(areas[0]){ %><a href="/tccs?area=<%= encodeURIComponent(areas[0]) %>"><%= areas[0] %></a><% } %></div><% } %>
     </div>
-    <div class="hero-art" aria-hidden="true"><div class="orb orb1"></div><div class="orb orb2"></div><div class="livro"><i class="fa-solid fa-book-open"></i></div><span class="float-card fc1"><i class="fa-solid fa-lightbulb"></i> Ideias</span><span class="float-card fc2"><i class="fa-solid fa-chart-line"></i> Pesquisa</span><span class="float-card fc3"><i class="fa-solid fa-users"></i> Comunidade</span></div>
+    <div class="hero-art" aria-hidden="true"><div class="orb orb1"></div><div class="orb orb2"></div><div class="livro"><i class="fa-solid fa-book-open"></i></div><span class="float-card fc1"><i class="fa-solid fa-lightbulb"></i> Projetos</span><span class="float-card fc2"><i class="fa-solid fa-chart-line"></i> Pesquisa</span><span class="float-card fc3"><i class="fa-solid fa-users"></i> Comunidade</span></div>
   </div>
 </section>
 <section class="stats"><div class="container stats-grid"><div><strong><%= stats.tccs %></strong><span>Trabalhos publicados</span></div><div><strong><%= cursos.length %></strong><span>Cursos disponíveis</span></div><div><strong><%= stats.views.toLocaleString('pt-BR') %></strong><span>Visualizações</span></div><div><strong><%= stats.downloads.toLocaleString('pt-BR') %></strong><span>Downloads</span></div></div></section>
@@ -23,5 +23,5 @@
   <div class="cursos-grid"><% cursos.forEach(curso=>{ %><a class="curso-card" href="/tccs?curso=<%= curso.id %>"><span><i class="fa-solid fa-graduation-cap"></i></span><h3><%= curso.nome %></h3><p><%= curso.sigla %></p><i class="fa-solid fa-arrow-right"></i></a><% }) %></div>
   <% if(!cursos.length){ %><div class="vazio"><i class="fa-solid fa-graduation-cap"></i><h3>Nenhum curso cadastrado</h3><p>A instituição ainda está preparando sua estrutura acadêmica.</p></div><% } %>
 </section>
-<section class="secao container dois-blocos"><article class="chamada chamada-azul"><span class="icone-grande"><i class="fa-solid fa-route"></i></span><div><h2>Aprenda a fazer seu TCC</h2><p>Do tema à apresentação, com exemplos, modelos e checklists.</p><a class="btn btn-branco" href="/aprender">Começar a trilha</a></div></article><article class="chamada chamada-clara"><span class="icone-grande"><i class="fa-regular fa-lightbulb"></i></span><div><h2>Banco de Ideias</h2><p>Descubra desafios reais ou compartilhe uma proposta.</p><a class="btn btn-primario" href="/ideias">Explorar ideias</a></div></article></section>
+<section class="secao container <%= usuarioAtual?'dois-blocos':'' %>"><article class="chamada chamada-azul"><span class="icone-grande"><i class="fa-solid fa-route"></i></span><div><h2>Aprenda a fazer seu TCC</h2><p>Do tema à apresentação, com exemplos, modelos e checklists.</p><a class="btn btn-branco" href="/aprender">Começar a trilha</a></div></article><% if(usuarioAtual){ %><article class="chamada chamada-clara"><span class="icone-grande"><i class="fa-regular fa-lightbulb"></i></span><div><h2>Banco de Ideias</h2><p>Descubra desafios reais ou compartilhe uma proposta.</p><a class="btn btn-primario" href="/ideias">Explorar ideias</a></div></article><% } %></section>
 <%- include('partials/footer') %>

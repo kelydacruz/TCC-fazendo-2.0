@@ -1,6 +1,10 @@
 <%- include('../partials/header') %>
 <section class="page-hero ideias-hero"><div class="container page-flex"><div><span class="eyebrow">Colaboração que gera projetos</span><h1>Banco de Ideias</h1><p>Encontre inspiração ou compartilhe um desafio com a comunidade.</p></div><% if(usuarioAtual){ %><a class="btn btn-branco" href="/ideias/nova"><i class="fa-solid fa-plus"></i> Publicar ideia</a><% } %></div></section>
 <section class="secao container">
+  <details class="fluxo-status">
+    <summary><span><i class="fa-solid fa-circle-info"></i><strong>Como funcionam os status das ideias?</strong></span><i class="fa-solid fa-chevron-down"></i></summary>
+    <div class="fluxo-status-conteudo"><p><strong>Quem altera:</strong> somente professores e administradores. Para mudar, abra uma ideia e clique em <strong>Alterar status e moderar</strong>. O aluno publica a proposta inicialmente como disponível.</p><div class="status-legenda"><span><b class="status disponivel">Disponível</b>Livre para uso</span><span><b class="status em-analise">Em análise</b>Em avaliação</span><span><b class="status reservada">Reservada</b>Vinculada a alguém</span><span><b class="status em-desenvolvimento">Em desenvolvimento</b>Projeto iniciado</span><span><b class="status utilizada">Utilizada</b>Projeto concluído</span><span><b class="status arquivada">Arquivada</b>Fora de uso</span></div></div>
+  </details>
   <form class="filtro-ideias" method="get" action="/ideias">
     <div class="busca busca-pagina"><i class="fa-solid fa-magnifying-glass"></i><input name="q" value="<%= query.q||'' %>" placeholder="Pesquise por tema, descrição ou problema" aria-label="Pesquisar ideias"><button>Pesquisar</button></div>
     <div class="filtros-linha filtros-ideias-grid">
