@@ -1,1 +1,27 @@
-<%- include('../partials/header') %><section class="page-hero"><div class="container narrow"><span class="eyebrow">Conhecimento compartilhado</span><h1>Sobre o AcervoTCC</h1><p>Uma plataforma de <%= config?.instituicao||'uma instituição de ensino técnico' %> para preservar pesquisas e inspirar novos projetos.</p></div></section><article class="secao container narrow conteudo-modulo"><h2>Nossa proposta</h2><p>O AcervoTCC reúne trabalhos publicados, orienta estudantes durante o desenvolvimento da pesquisa e aproxima problemas reais de pessoas dispostas a transformá-los em projetos.</p><div class="dois-conteudos"><section><h2>Para estudantes</h2><p>Referências, trilha de aprendizagem, ideias e acompanhamento transparente da avaliação.</p></section><section><h2>Para professores</h2><p>Busca organizada, revisão de trabalhos, moderação e histórico dos projetos orientados.</p></section></div></article><%- include('../partials/footer') %>
+<%- include('../cabecalho') %>
+
+<section class="page-hero">
+  <div class="container narrow">
+    <span class="eyebrow">Conhecimento compartilhado</span>
+    <h1>Sobre o AcervoTCC</h1>
+    <p>Uma plataforma de <%= config?.instituicao || 'uma instituição de ensino técnico' %> para preservar pesquisas e inspirar novos projetos.</p>
+  </div>
+</section>
+
+<article class="secao container narrow conteudo-modulo">
+  <h2>Nossa proposta</h2>
+  <p>O AcervoTCC reúne trabalhos publicados, orienta estudantes durante o desenvolvimento da pesquisa e aproxima problemas reais de pessoas dispostas a transformá-los em projetos.</p>
+
+  <div class="dois-conteudos">
+    <section>
+      <h2>Para estudantes</h2>
+      <p>Referências, trilha de aprendizagem, ideias e acompanhamento transparente da avaliação.</p>
+    </section>
+    <section>
+      <h2>Para professores</h2>
+      <p>Busca organizada, revisão de trabalhos, moderação e histórico dos projetos orientados.</p>
+    </section>
+  </div>
+</article>
+
+<%- include('../rodape') %>

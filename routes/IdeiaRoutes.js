@@ -1,3 +1,25 @@
-import express from 'express';import rateLimit from 'express-rate-limit';import IdeiaController from '../controllers/IdeiaController.js';import ComentarioController from '../controllers/ComentarioController.js';import { autenticado,perfisPermitidos } from '../middlewares/autorizacao.js';import { assinc } from '../middlewares/erros.js';
-const router=express.Router();const ideia=new IdeiaController();const comentario=new ComentarioController();const limite=rateLimit({windowMs:60*1000,limit:6,standardHeaders:true,legacyHeaders:false});
-router.use('/ideias',autenticado);router.get('/ideias',assinc(ideia.list));router.get('/ideias/nova',assinc(ideia.openAdd));router.post('/ideias/nova',assinc(ideia.add));router.get('/ideias/:id',assinc(ideia.detalhes));router.post('/ideias/:id/status',perfisPermitidos('aluno'),assinc(ideia.statusAluno));router.get('/ideias/:id/editar',assinc(ideia.openEdt));router.post('/ideias/:id/editar',assinc(ideia.edt));router.post('/ideias/:id/excluir',assinc(ideia.del));router.post('/ideias/:id/favorito',assinc(ideia.favorito));router.post('/ideias/:ideiaId/comentarios',limite,assinc(comentario.add));router.post('/comentarios/:id/excluir',autenticado,assinc(comentario.del));router.post('/comentarios/:id/denunciar',autenticado,assinc(comentario.denunciar));router.post('/comentarios/:id/moderar',autenticado,perfisPermitidos('professor','administrador'),assinc(comentario.moderar));export default router;
+import express from 'express';
+import IdeiaController from '../controllers/IdeiaController.js';
+import { autenticado, perfisPermitidos } from '../middlewares/autorizacao.js';
+import { assinc } from '../middlewares/erros.js';
+
+const router = express.Router();
+const controle = new IdeiaController();
+const caminhoBase = 'ideias';
+
+router.use('/' + caminhoBase, autenticado);
+router.get('/' + caminhoBase, assinc(controle.list));
+router.get('/' + caminhoBase + '/nova', assinc(controle.openAdd));
+router.post('/' + caminhoBase + '/nova', assinc(controle.add));
+router.get('/' + caminhoBase + '/:id', assinc(controle.detalhes));
+router.post(
+  '/' + caminhoBase + '/:id/status',
+  perfisPermitidos('aluno'),
+  assinc(controle.statusAluno)
+);
+router.get('/' + caminhoBase + '/:id/editar', assinc(controle.openEdt));
+router.post('/' + caminhoBase + '/:id/editar', assinc(controle.edt));
+router.post('/' + caminhoBase + '/:id/excluir', assinc(controle.del));
+router.post('/' + caminhoBase + '/:id/favorito', assinc(controle.favorito));
+
+export default router;

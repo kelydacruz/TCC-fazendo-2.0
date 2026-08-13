@@ -1,6 +1,6 @@
 # AcervoTCC
 
-Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Conclusão de Curso. A organização segue o padrão MVC do projeto `DAWII-Adocao`: Express, EJS, Mongoose, controllers em classes, rotas e views separadas por módulo.
+Aplicação completa para reunir, revisar, publicar e consultar Trabalhos de Conclusão de Curso. A organização segue principalmente o padrão MVC do projeto `DAWII-Adocao`: Express, EJS, Mongoose, controllers em classes, uma rota por entidade e views organizadas por módulo.
 
 ## Funcionalidades
 
@@ -32,18 +32,32 @@ Acesse `http://localhost:3001`.
 
 O passo a passo completo para configurar o ambiente e validar os acessos de aluno, professor e administrador está em [`TESTING.md`](TESTING.md). O roteiro inclui o fluxo aluno envia → professor avalia → professor libera para o catálogo público.
 
+## Padrão de organização
+
+O projeto foi reformulado para se aproximar da forma de código utilizada em `DAWII-Adocao`, `vercellKely` e `Prova-k`:
+
+- controllers em classes, com `constructor(caminhoBase)` e métodos com nomes como `openAdd`, `add`, `list`, `openEdt`, `edt` e `del`;
+- controllers e arquivos de rotas separados por entidade, inclusive na área administrativa;
+- schemas Mongoose em arquivos próprios dentro de `models`;
+- páginas EJS separadas por módulo, com `views/cabecalho.ejs` e `views/rodape.ejs` compartilhados;
+- código escrito em blocos legíveis, evitando controllers, rotas e páginas inteiras em uma única linha;
+- entrada comum em `index.js` e entrada serverless em `api/index.js` para a Vercel.
+
+Recursos que não existem nos projetos de referência — autenticação institucional, permissões, CSRF, upload seguro, fluxo de revisão, favoritos e testes — permanecem em pastas próprias porque são necessários ao AcervoTCC. O CSS continua separado em `public/css` e não foi alterado nesta reformulação.
+
 ## Estrutura
 
 ```text
 api/          entrada serverless da Vercel
 config/       conexão MongoDB e envio de e-mails
-controllers/  regras de negócio em classes
+controllers/  uma classe por entidade e regras de negócio
 middlewares/  autenticação, permissões, CSRF, erros e upload
 models/       schemas Mongoose
 public/       CSS e JavaScript do navegador
-routes/       rotas Express por módulo
+routes/       uma rota Express por entidade
 scripts/      carga inicial do banco
-views/        páginas e componentes EJS
+views/        páginas EJS por módulo, cabeçalho e rodapé compartilhados
+test/         testes de regras, perfis, páginas e organização do código
 ```
 
 ## Configuração

@@ -1,25 +1,175 @@
-<%- include('../partials/header') %>
-<section class="page-hero"><div class="container page-flex"><div><span class="eyebrow">Colaboração que gera projetos</span><h1>Banco de Ideias</h1><p>Encontre inspiração ou compartilhe um desafio com a comunidade.</p></div><% if(usuarioAtual){ %><a class="btn btn-primario" href="/ideias/nova"><i class="fa-solid fa-plus"></i> Publicar ideia</a><% } %></div></section>
+<%- include('../cabecalho') %>
+
+<section class="page-hero">
+  <div class="container page-flex">
+    <div>
+      <span class="eyebrow">Colaboração que gera projetos</span>
+      <h1>Banco de Ideias</h1>
+      <p>Encontre inspiração ou compartilhe um desafio com a comunidade.</p>
+    </div>
+    <a class="btn btn-primario" href="/ideias/nova">
+      <i class="fa-solid fa-plus"></i> Publicar ideia
+    </a>
+  </div>
+</section>
+
 <section class="secao container">
   <details class="fluxo-status">
-    <summary><span><i class="fa-solid fa-circle-info"></i><strong>Como funcionam os status das ideias?</strong></span><i class="fa-solid fa-chevron-down"></i></summary>
-    <div class="fluxo-status-conteudo"><p><strong>Quem altera:</strong> o próprio aluno escolhe uma ideia disponível e atualiza seu andamento para reservada, em desenvolvimento ou utilizada. Professores e administradores cuidam apenas da análise e do arquivamento.</p><div class="status-legenda"><span><b class="status disponivel">Disponível</b>Livre para escolher</span><span><b class="status em-analise">Em análise</b>Revisão institucional</span><span><b class="status reservada">Reservada</b>Escolhida por um aluno</span><span><b class="status em-desenvolvimento">Em desenvolvimento</b>Projeto iniciado</span><span><b class="status utilizada">Utilizada</b>Projeto concluído</span><span><b class="status arquivada">Arquivada</b>Fora de uso</span></div></div>
+    <summary>
+      <span>
+        <i class="fa-solid fa-circle-info"></i>
+        <strong>Como funcionam os status das ideias?</strong>
+      </span>
+      <i class="fa-solid fa-chevron-down"></i>
+    </summary>
+
+    <div class="fluxo-status-conteudo">
+      <p><strong>Quem altera:</strong> o próprio aluno escolhe uma ideia disponível e atualiza seu andamento para reservada, em desenvolvimento ou utilizada. Professores e administradores cuidam apenas da análise e do arquivamento.</p>
+      <div class="status-legenda">
+        <span><b class="status disponivel">Disponível</b>Livre para escolher</span>
+        <span><b class="status em-analise">Em análise</b>Revisão institucional</span>
+        <span><b class="status reservada">Reservada</b>Escolhida por um aluno</span>
+        <span><b class="status em-desenvolvimento">Em desenvolvimento</b>Projeto iniciado</span>
+        <span><b class="status utilizada">Utilizada</b>Projeto concluído</span>
+        <span><b class="status arquivada">Arquivada</b>Fora de uso</span>
+      </div>
+    </div>
   </details>
+
   <form class="filtro-ideias" method="get" action="/ideias">
-    <div class="busca busca-pagina"><i class="fa-solid fa-magnifying-glass"></i><input name="q" value="<%= query.q||'' %>" placeholder="Pesquise por tema, descrição ou problema" aria-label="Pesquisar ideias"><button>Pesquisar</button></div>
+    <div class="busca busca-pagina">
+      <i class="fa-solid fa-magnifying-glass"></i>
+      <input
+        name="q"
+        value="<%= query.q || '' %>"
+        placeholder="Pesquise por tema, descrição ou problema"
+        aria-label="Pesquisar ideias"
+      >
+      <button>Pesquisar</button>
+    </div>
+
     <div class="filtros-linha filtros-ideias-grid">
-      <label>Curso<select name="curso"><option value="">Todos os cursos</option><% cursos.forEach(i=>{ %><option value="<%= i.id %>" <%= String(query.curso||'')===String(i.id)?'selected':'' %>><%= i.nome %></option><% }) %></select></label>
-      <label>Área<select name="area"><option value="">Todas as áreas</option><% areas.forEach(i=>{ %><option value="<%= i %>" <%= query.area===i?'selected':'' %>><%= i %></option><% }) %></select></label>
-      <label>Dificuldade<select name="dificuldade"><option value="">Todas</option><% ['Iniciante','Intermediária','Avançada'].forEach(i=>{ %><option value="<%= i %>" <%= query.dificuldade===i?'selected':'' %>><%= i %></option><% }) %></select></label>
-      <label>Status<select name="status"><option value="">Todos os status</option><% statusIdeia.forEach(i=>{ %><option value="<%= i %>" <%= query.status===i?'selected':'' %>><%= i %></option><% }) %></select></label>
-      <label>Publicada a partir de<input type="date" name="dataInicio" value="<%= query.dataInicio||'' %>"></label>
-      <label>Publicada até<input type="date" name="dataFim" value="<%= query.dataFim||'' %>"></label>
-      <label>Ordenação<select name="ordem"><option value="recentes" <%= query.ordem!=='antigas'?'selected':'' %>>Mais recentes</option><option value="antigas" <%= query.ordem==='antigas'?'selected':'' %>>Mais antigas</option></select></label>
-      <div class="filtro-acoes"><button class="btn btn-primario"><i class="fa-solid fa-filter"></i> Aplicar filtros</button><a class="btn btn-outline" href="/ideias">Limpar tudo</a></div>
+      <label>
+        Curso
+        <select name="curso">
+          <option value="">Todos os cursos</option>
+          <% cursos.forEach(item => { %>
+            <option value="<%= item.id %>" <%= String(query.curso || '') === String(item.id) ? 'selected' : '' %>><%= item.nome %></option>
+          <% }) %>
+        </select>
+      </label>
+
+      <label>
+        Área
+        <select name="area">
+          <option value="">Todas as áreas</option>
+          <% areas.forEach(item => { %>
+            <option value="<%= item %>" <%= query.area === item ? 'selected' : '' %>><%= item %></option>
+          <% }) %>
+        </select>
+      </label>
+
+      <label>
+        Dificuldade
+        <select name="dificuldade">
+          <option value="">Todas</option>
+          <% ['Iniciante', 'Intermediária', 'Avançada'].forEach(item => { %>
+            <option value="<%= item %>" <%= query.dificuldade === item ? 'selected' : '' %>><%= item %></option>
+          <% }) %>
+        </select>
+      </label>
+
+      <label>
+        Status
+        <select name="status">
+          <option value="">Todos os status</option>
+          <% statusIdeia.forEach(item => { %>
+            <option value="<%= item %>" <%= query.status === item ? 'selected' : '' %>><%= item %></option>
+          <% }) %>
+        </select>
+      </label>
+
+      <label>
+        Publicada a partir de
+        <input type="date" name="dataInicio" value="<%= query.dataInicio || '' %>">
+      </label>
+
+      <label>
+        Publicada até
+        <input type="date" name="dataFim" value="<%= query.dataFim || '' %>">
+      </label>
+
+      <label>
+        Ordenação
+        <select name="ordem">
+          <option value="recentes" <%= query.ordem !== 'antigas' ? 'selected' : '' %>>Mais recentes</option>
+          <option value="antigas" <%= query.ordem === 'antigas' ? 'selected' : '' %>>Mais antigas</option>
+        </select>
+      </label>
+
+      <div class="filtro-acoes">
+        <button class="btn btn-primario">
+          <i class="fa-solid fa-filter"></i> Aplicar filtros
+        </button>
+        <a class="btn btn-outline" href="/ideias">Limpar tudo</a>
+      </div>
     </div>
   </form>
-  <div class="resultado-topo"><p><strong><%= ideias.length %></strong> <%= ideias.length===1?'ideia encontrada':'ideias encontradas' %></p></div>
-  <div class="ideias-grid"><% ideias.forEach(ideia=>{ %><article class="card ideia-card"><div class="ideia-topo"><span class="status <%= ideia.status.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replaceAll(' ','-') %>"><%= ideia.status %></span><span><i class="fa-regular fa-calendar"></i> <%= new Date(ideia.createdAt).toLocaleDateString('pt-BR') %></span></div><h2><a href="/ideias/<%= ideia.id %>"><%= ideia.titulo %></a></h2><p><%= ideia.descricao %></p><div class="ideia-uso"><i class="fa-solid fa-circle-info"></i><span><%= descricaoUsoIdeia(ideia) %></span></div><div class="ideia-dados"><span><i class="fa-solid fa-graduation-cap"></i> <%= ideia.curso?.nome %></span><span><i class="fa-solid fa-signal"></i> <%= ideia.dificuldade %></span></div><div class="ideia-rodape"><span><%= ideia.autor?.nome %></span><a href="/ideias/<%= ideia.id %>">Ver detalhes</a></div></article><% }) %></div>
-  <% if(!ideias.length){ const temFiltro=Object.values(query).some(Boolean); %><div class="vazio"><i class="fa-regular fa-lightbulb"></i><h2><%= temFiltro?'Nenhuma ideia encontrada':'O Banco de Ideias está vazio' %></h2><p><%= temFiltro?'Tente remover algum filtro ou pesquisar por outros termos.':'A primeira proposta aparecerá aqui quando um aluno ou professor publicá-la.' %></p></div><% } %>
+
+  <div class="resultado-topo">
+    <p>
+      <strong><%= ideias.length %></strong>
+      <%= ideias.length === 1 ? 'ideia encontrada' : 'ideias encontradas' %>
+    </p>
+  </div>
+
+  <div class="ideias-grid">
+    <% ideias.forEach(ideia => { %>
+      <%
+        const statusClasse = ideia.status
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g, '')
+          .toLowerCase()
+          .replaceAll(' ', '-');
+      %>
+      <article class="card ideia-card">
+        <div class="ideia-topo">
+          <span class="status <%= statusClasse %>"><%= ideia.status %></span>
+          <span>
+            <i class="fa-regular fa-calendar"></i>
+            <%= new Date(ideia.createdAt).toLocaleDateString('pt-BR') %>
+          </span>
+        </div>
+
+        <h2><a href="/ideias/<%= ideia.id %>"><%= ideia.titulo %></a></h2>
+        <p><%= ideia.descricao %></p>
+
+        <div class="ideia-uso">
+          <i class="fa-solid fa-circle-info"></i>
+          <span><%= descricaoUsoIdeia(ideia) %></span>
+        </div>
+
+        <div class="ideia-dados">
+          <span><i class="fa-solid fa-graduation-cap"></i> <%= ideia.curso?.nome %></span>
+          <span><i class="fa-solid fa-signal"></i> <%= ideia.dificuldade %></span>
+        </div>
+
+        <div class="ideia-rodape">
+          <span><%= ideia.autor?.nome %></span>
+          <a href="/ideias/<%= ideia.id %>">Ver detalhes</a>
+        </div>
+      </article>
+    <% }) %>
+  </div>
+
+  <% if (!ideias.length) { %>
+    <% const temFiltro = Object.values(query).some(Boolean); %>
+    <div class="vazio">
+      <i class="fa-regular fa-lightbulb"></i>
+      <h2><%= temFiltro ? 'Nenhuma ideia encontrada' : 'O Banco de Ideias está vazio' %></h2>
+      <p><%= temFiltro ? 'Tente remover algum filtro ou pesquisar por outros termos.' : 'A primeira proposta aparecerá aqui quando um aluno ou professor publicá-la.' %></p>
+    </div>
+  <% } %>
 </section>
-<%- include('../partials/footer') %>
+
+<%- include('../rodape') %>

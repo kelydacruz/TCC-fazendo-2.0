@@ -1,5 +1,64 @@
-<%- include('../partials/header') %>
-<section class="page-hero admin-hero"><div class="container"><span class="eyebrow">Administração</span><h1>Configurações</h1><p>Controle os dados institucionais e os recursos públicos da plataforma.</p></div></section>
+<%- include('../cabecalho') %>
+
+<section class="page-hero admin-hero">
+  <div class="container">
+    <span class="eyebrow">Administração</span>
+    <h1>Configurações</h1>
+    <p>Controle os dados institucionais e os recursos públicos da plataforma.</p>
+  </div>
+</section>
+
 <%- include('nav') %>
-<section class="secao container narrow"><form class="form-card" method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><h2>Identidade institucional</h2><label>Instituição<input name="instituicao" value="<%= config.instituicao %>" required></label><div class="form-grid"><label>Contato<input type="email" name="contato" value="<%= config.contato %>" required></label><label>Endereço<input name="endereco" value="<%= config.endereco||'' %>"></label></div><label>Política de privacidade<textarea name="privacidade" rows="8"><%= config.privacidade||'' %></textarea></label><h2>Recursos públicos</h2><div class="form-grid"><label>Cadastro<select name="permitirCadastro"><option value="true" <%= config.permitirCadastro?'selected':'' %>>Permitido</option><option value="false" <%= !config.permitirCadastro?'selected':'' %>>Bloqueado</option></select></label><label>Downloads<select name="permitirDownloads"><option value="true" <%= config.permitirDownloads?'selected':'' %>>Permitidos</option><option value="false" <%= !config.permitirDownloads?'selected':'' %>>Bloqueados</option></select></label></div><div class="form-acoes"><button class="btn btn-primario">Salvar configurações</button></div></form></section>
-<%- include('../partials/footer') %>
+
+<section class="secao container narrow">
+  <form class="form-card" method="post">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+    <h2>Identidade institucional</h2>
+    <label>
+      Instituição
+      <input name="instituicao" value="<%= config.instituicao %>" required>
+    </label>
+
+    <div class="form-grid">
+      <label>
+        Contato
+        <input type="email" name="contato" value="<%= config.contato %>" required>
+      </label>
+      <label>
+        Endereço
+        <input name="endereco" value="<%= config.endereco || '' %>">
+      </label>
+    </div>
+
+    <label>
+      Política de privacidade
+      <textarea name="privacidade" rows="8"><%= config.privacidade || '' %></textarea>
+    </label>
+
+    <h2>Recursos públicos</h2>
+    <div class="form-grid">
+      <label>
+        Cadastro
+        <select name="permitirCadastro">
+          <option value="true" <%= config.permitirCadastro ? 'selected' : '' %>>Permitido</option>
+          <option value="false" <%= !config.permitirCadastro ? 'selected' : '' %>>Bloqueado</option>
+        </select>
+      </label>
+
+      <label>
+        Downloads
+        <select name="permitirDownloads">
+          <option value="true" <%= config.permitirDownloads ? 'selected' : '' %>>Permitidos</option>
+          <option value="false" <%= !config.permitirDownloads ? 'selected' : '' %>>Bloqueados</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="form-acoes">
+      <button class="btn btn-primario">Salvar configurações</button>
+    </div>
+  </form>
+</section>
+
+<%- include('../rodape') %>

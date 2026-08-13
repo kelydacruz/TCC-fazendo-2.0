@@ -1,1 +1,52 @@
-<%- include('partials/header') %><section class="page-hero trilha-hero"><div class="container narrow"><span class="eyebrow">Trilha de aprendizagem</span><h1>Seu TCC, passo a passo</h1><p>Conteúdo prático da escolha do tema até a apresentação final.</p><% if(usuarioAtual){ %><div class="progresso"><div><span>Seu progresso</span><strong><%= concluidos.length %> de <%= modulos.length %> módulos</strong></div><div class="barra"><span style="width:<%= modulos.length?concluidos.length/modulos.length*100:0 %>%"></span></div></div><% }else{ %><div class="progresso"><div><span>A trilha é pública</span><a href="/entrar"><strong>Entre para salvar seu progresso</strong></a></div></div><% } %></div></section><section class="secao container narrow"><div class="trilha"><% modulos.forEach(item=>{ %><a class="modulo <%= concluidos.includes(item.id)?'concluido':'' %>" href="/aprender/<%= item.id %>"><span class="numero"><%= String(item.ordem).padStart(2,'0') %></span><div><small>Módulo <%= item.ordem %></small><h2><%= item.titulo %></h2><p><%= item.explicacao.slice(0,140) %>...</p></div><i class="fa-solid fa-<%= concluidos.includes(item.id)?'check':'chevron-right' %>"></i></a><% }) %></div><% if(!modulos.length){ %><div class="vazio"><h2>A trilha está sendo preparada</h2></div><% } %></section><%- include('partials/footer') %>
+<%- include('cabecalho') %>
+
+<section class="page-hero trilha-hero">
+  <div class="container narrow">
+    <span class="eyebrow">Trilha de aprendizagem</span>
+    <h1>Seu TCC, passo a passo</h1>
+    <p>Conteúdo prático da escolha do tema até a apresentação final.</p>
+
+    <% if (usuarioAtual) { %>
+      <div class="progresso">
+        <div>
+          <span>Seu progresso</span>
+          <strong><%= concluidos.length %> de <%= modulos.length %> módulos</strong>
+        </div>
+        <div class="barra">
+          <span style="width:<%= modulos.length ? concluidos.length / modulos.length * 100 : 0 %>%"></span>
+        </div>
+      </div>
+    <% } else { %>
+      <div class="progresso">
+        <div>
+          <span>A trilha é pública</span>
+          <a href="/entrar"><strong>Entre para salvar seu progresso</strong></a>
+        </div>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<section class="secao container narrow">
+  <div class="trilha">
+    <% modulos.forEach(modulo => { %>
+      <a class="modulo <%= concluidos.includes(modulo.id) ? 'concluido' : '' %>" href="/aprender/<%= modulo.id %>">
+        <span class="numero"><%= String(modulo.ordem).padStart(2, '0') %></span>
+        <div>
+          <small>Módulo <%= modulo.ordem %></small>
+          <h2><%= modulo.titulo %></h2>
+          <p><%= modulo.explicacao.slice(0, 140) %>...</p>
+        </div>
+        <i class="fa-solid fa-<%= concluidos.includes(modulo.id) ? 'check' : 'chevron-right' %>"></i>
+      </a>
+    <% }) %>
+  </div>
+
+  <% if (!modulos.length) { %>
+    <div class="vazio">
+      <h2>A trilha está sendo preparada</h2>
+    </div>
+  <% } %>
+</section>
+
+<%- include('rodape') %>

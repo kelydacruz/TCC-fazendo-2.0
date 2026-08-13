@@ -1,1 +1,116 @@
-<%- include('../partials/header') %><section class="page-hero"><div class="container"><span class="status"><%= tcc.status %></span><h1>Gerenciar TCC</h1><p><%= tcc.titulo %></p><small class="descricao-status"><%= descricaoStatus %></small></div></section><section class="secao container narrow"><% if(editavel){ %><form class="form-card" method="post" enctype="multipart/form-data"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><%- include('form') %><div class="form-acoes"><button class="btn btn-outline" name="acao" value="rascunho">Salvar alterações</button><button class="btn btn-primario" name="acao" value="enviar">Enviar versão final</button></div></form><% }else{ %><div class="aviso"><i class="fa-solid fa-lock"></i><div><h2>Edição bloqueada</h2><p><%= descricaoStatus %></p></div></div><% } %><section class="subsecao"><h2>Histórico</h2><div class="timeline"><% tcc.historico.slice().reverse().forEach(item=>{ %><article><span></span><div><strong><%= item.status %></strong><small><%= new Date(item.data).toLocaleString('pt-BR') %> · <%= item.usuario?.nome||'Usuário do sistema' %> (<%= item.usuario?.perfil||'perfil indisponível' %>)</small><p><%= item.observacao||'Sem observações.' %></p></div></article><% }) %></div></section><% if(['professor','administrador'].includes(usuarioAtual.perfil)&&acoesAvaliacao.length){ const liberarProfessor=tcc.status==='Aprovado'&&usuarioAtual.perfil==='professor'; %><form class="form-card <%= liberarProfessor?'liberar-site':'' %>" method="post" action="/tcc/revisar/<%= tcc.id %>" <% if(liberarProfessor){ %>data-confirm="Liberar este TCC para aparecer no site público?"<% } %>><input type="hidden" name="_csrf" value="<%= csrfToken %>"><h2><%= liberarProfessor?'Liberar para o site':'Registrar avaliação' %></h2><% if(liberarProfessor){ %><p>O trabalho foi aprovado, mas ainda não está público. Confirme a liberação para disponibilizá-lo no catálogo.</p><input type="hidden" name="status" value="Publicado"><% }else{ %><label>Resultado<select name="status" required><% acoesAvaliacao.forEach(item=>{ %><option><%= item %></option><% }) %></select></label><% } %><label>Observações<textarea name="observacao" rows="5" maxlength="2000" placeholder="Registre o parecer ou uma observação para o histórico"></textarea></label><button class="btn btn-primario"><%= liberarProfessor?'Liberar TCC para o site':'Salvar avaliação' %></button></form><% } %><% if(tcc.status==='Rascunho'||usuarioAtual.perfil==='administrador'){ %><form class="form-perigo" method="post" action="/tcc/del/<%= tcc.id %>" data-confirm="Excluir este TCC permanentemente?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-perigo">Excluir TCC</button></form><% } %></section><%- include('../partials/footer') %>
+<%- include('../cabecalho') %>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="status"><%= tcc.status %></span>
+    <h1>Gerenciar TCC</h1>
+    <p><%= tcc.titulo %></p>
+    <small class="descricao-status"><%= descricaoStatus %></small>
+  </div>
+</section>
+
+<section class="secao container narrow">
+  <% if (editavel) { %>
+    <form class="form-card" method="post" enctype="multipart/form-data">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <%- include('form') %>
+
+      <div class="form-acoes">
+        <button class="btn btn-outline" name="acao" value="rascunho">
+          Salvar alterações
+        </button>
+        <button class="btn btn-primario" name="acao" value="enviar">
+          Enviar versão final
+        </button>
+      </div>
+    </form>
+  <% } else { %>
+    <div class="aviso">
+      <i class="fa-solid fa-lock"></i>
+      <div>
+        <h2>Edição bloqueada</h2>
+        <p><%= descricaoStatus %></p>
+      </div>
+    </div>
+  <% } %>
+
+  <section class="subsecao">
+    <h2>Histórico</h2>
+    <div class="timeline">
+      <% tcc.historico.slice().reverse().forEach(item => { %>
+        <article>
+          <span></span>
+          <div>
+            <strong><%= item.status %></strong>
+            <small>
+              <%= new Date(item.data).toLocaleString('pt-BR') %> ·
+              <%= item.usuario?.nome || 'Usuário do sistema' %>
+              (<%= item.usuario?.perfil || 'perfil indisponível' %>)
+            </small>
+            <p><%= item.observacao || 'Sem observações.' %></p>
+          </div>
+        </article>
+      <% }) %>
+    </div>
+  </section>
+
+  <%
+    const podeAvaliar = ['professor', 'administrador'].includes(usuarioAtual.perfil)
+      && acoesAvaliacao.length;
+    const liberarProfessor = tcc.status === 'Aprovado'
+      && usuarioAtual.perfil === 'professor';
+  %>
+  <% if (podeAvaliar) { %>
+    <form
+      class="form-card <%= liberarProfessor ? 'liberar-site' : '' %>"
+      method="post"
+      action="/tcc/revisar/<%= tcc.id %>"
+      <% if (liberarProfessor) { %>data-confirm="Liberar este TCC para aparecer no site público?"<% } %>
+    >
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <h2><%= liberarProfessor ? 'Liberar para o site' : 'Registrar avaliação' %></h2>
+
+      <% if (liberarProfessor) { %>
+        <p>O trabalho foi aprovado, mas ainda não está público. Confirme a liberação para disponibilizá-lo no catálogo.</p>
+        <input type="hidden" name="status" value="Publicado">
+      <% } else { %>
+        <label>
+          Resultado
+          <select name="status" required>
+            <% acoesAvaliacao.forEach(item => { %>
+              <option><%= item %></option>
+            <% }) %>
+          </select>
+        </label>
+      <% } %>
+
+      <label>
+        Observações
+        <textarea
+          name="observacao"
+          rows="5"
+          maxlength="2000"
+          placeholder="Registre o parecer ou uma observação para o histórico"
+        ></textarea>
+      </label>
+
+      <button class="btn btn-primario">
+        <%= liberarProfessor ? 'Liberar TCC para o site' : 'Salvar avaliação' %>
+      </button>
+    </form>
+  <% } %>
+
+  <% if (tcc.status === 'Rascunho' || usuarioAtual.perfil === 'administrador') { %>
+    <form
+      class="form-perigo"
+      method="post"
+      action="/tcc/del/<%= tcc.id %>"
+      data-confirm="Excluir este TCC permanentemente?"
+    >
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <button class="btn btn-perigo">Excluir TCC</button>
+    </form>
+  <% } %>
+</section>
+
+<%- include('../rodape') %>

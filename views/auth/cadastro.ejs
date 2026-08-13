@@ -1,1 +1,47 @@
-<%- include('../partials/header') %><section class="secao container auth-wrap"><div class="auth-card"><h1>Crie sua conta</h1><p>Use seu e-mail institucional. O domínio identifica automaticamente se a conta é de aluno ou professor.</p><div class="dominios-info"><% if(dominiosEmail.aluno.length){ %><span><strong>Aluno:</strong> @<%= dominiosEmail.aluno.join(', @') %></span><% } %><% if(dominiosEmail.professor.length){ %><span><strong>Professor:</strong> @<%= dominiosEmail.professor.join(', @') %></span><% } %></div><form method="post"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Nome completo<input name="nome" required maxlength="120" autocomplete="name"></label><label>E-mail institucional<input type="email" name="email" required autocomplete="email"></label><label>Senha<input type="password" name="senha" required minlength="8" autocomplete="new-password"></label><label>Confirme a senha<input type="password" name="confirmarSenha" required minlength="8" autocomplete="new-password"></label><button class="btn btn-primario largura">Criar conta</button></form><p>Já possui conta? <a href="/entrar"><strong>Entrar</strong></a></p></div></section><%- include('../partials/footer') %>
+<%- include('../cabecalho') %>
+
+<section class="secao container auth-wrap">
+  <div class="auth-card">
+    <h1>Crie sua conta</h1>
+    <p>Use seu e-mail institucional. O domínio identifica automaticamente se a conta é de aluno ou professor.</p>
+
+    <div class="dominios-info">
+      <% if (dominiosEmail.aluno.length) { %>
+        <span><strong>Aluno:</strong> @<%= dominiosEmail.aluno.join(', @') %></span>
+      <% } %>
+      <% if (dominiosEmail.professor.length) { %>
+        <span><strong>Professor:</strong> @<%= dominiosEmail.professor.join(', @') %></span>
+      <% } %>
+    </div>
+
+    <form method="post">
+      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
+      <label>
+        Nome completo
+        <input name="nome" required maxlength="120" autocomplete="name">
+      </label>
+
+      <label>
+        E-mail institucional
+        <input type="email" name="email" required autocomplete="email">
+      </label>
+
+      <label>
+        Senha
+        <input type="password" name="senha" required minlength="8" autocomplete="new-password">
+      </label>
+
+      <label>
+        Confirme a senha
+        <input type="password" name="confirmarSenha" required minlength="8" autocomplete="new-password">
+      </label>
+
+      <button class="btn btn-primario largura">Criar conta</button>
+    </form>
+
+    <p>Já possui conta? <a href="/entrar"><strong>Entrar</strong></a></p>
+  </div>
+</section>
+
+<%- include('../rodape') %>

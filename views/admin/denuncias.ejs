@@ -1,5 +1,82 @@
-<%- include('../partials/header') %>
-<section class="page-hero admin-hero"><div class="container"><span class="eyebrow">Administração</span><h1>Moderação</h1><p>Analise denúncias e preserve um ambiente respeitoso.</p></div></section>
+<%- include('../cabecalho') %>
+
+<section class="page-hero admin-hero">
+  <div class="container">
+    <span class="eyebrow">Administração</span>
+    <h1>Moderação</h1>
+    <p>Analise denúncias e preserve um ambiente respeitoso.</p>
+  </div>
+</section>
+
 <%- include('nav') %>
-<section class="secao container narrow"><div class="secao-titulo"><div><h2>Denúncias</h2><p><%= denuncias.filter(item=>item.status==='Pendente').length %> pendentes</p></div></div><div class="admin-lista"><% denuncias.forEach(item=>{ %><details class="admin-item"><summary><div><strong><%= item.comentario?.autor?.nome||'Comentário removido' %></strong><small><%= item.motivo %></small></div><div class="admin-item-meta"><span class="status <%= item.status==='Pendente'?'reservada':'disponivel' %>"><%= item.status %></span><i class="fa-solid fa-chevron-down"></i></div></summary><div class="admin-item-conteudo"><div class="comentario-moderacao"><small>Comentário denunciado</small><p><%= item.comentario?.texto||'Este comentário já foi removido.' %></p><span>Denunciado por <%= item.denunciante?.nome||'usuário removido' %></span></div><form method="post" action="/admin/denuncias/<%= item.id %>"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><label>Resultado<select name="status"><% ['Pendente','Analisada','Descartada'].forEach(i=>{ %><option value="<%= i %>" <%= item.status===i?'selected':'' %>><%= i %></option><% }) %></select></label><div class="form-acoes"><button class="btn btn-primario">Salvar análise</button></div></form><form class="admin-excluir" method="post" action="/admin/denuncias/<%= item.id %>/excluir" data-confirm="Excluir definitivamente esta denúncia?"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><button class="btn btn-texto-perigo"><i class="fa-regular fa-trash-can"></i> Excluir denúncia</button></form></div></details><% }) %><% if(!denuncias.length){ %><div class="vazio"><i class="fa-solid fa-shield-heart"></i><h2>Nenhuma denúncia</h2><p>Não há conteúdo aguardando moderação.</p></div><% } %></div></section>
-<%- include('../partials/footer') %>
+
+<section class="secao container narrow">
+  <div class="secao-titulo">
+    <div>
+      <h2>Denúncias</h2>
+      <p><%= denuncias.filter(item => item.status === 'Pendente').length %> pendentes</p>
+    </div>
+  </div>
+
+  <div class="admin-lista">
+    <% denuncias.forEach(item => { %>
+      <details class="admin-item">
+        <summary>
+          <div>
+            <strong><%= item.comentario?.autor?.nome || 'Comentário removido' %></strong>
+            <small><%= item.motivo %></small>
+          </div>
+          <div class="admin-item-meta">
+            <span class="status <%= item.status === 'Pendente' ? 'reservada' : 'disponivel' %>"><%= item.status %></span>
+            <i class="fa-solid fa-chevron-down"></i>
+          </div>
+        </summary>
+
+        <div class="admin-item-conteudo">
+          <div class="comentario-moderacao">
+            <small>Comentário denunciado</small>
+            <p><%= item.comentario?.texto || 'Este comentário já foi removido.' %></p>
+            <span>Denunciado por <%= item.denunciante?.nome || 'usuário removido' %></span>
+          </div>
+
+          <form method="post" action="/admin/denuncias/<%= item.id %>">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <label>
+              Resultado
+              <select name="status">
+                <% ['Pendente', 'Analisada', 'Descartada'].forEach(status => { %>
+                  <option value="<%= status %>" <%= item.status === status ? 'selected' : '' %>><%= status %></option>
+                <% }) %>
+              </select>
+            </label>
+            <div class="form-acoes">
+              <button class="btn btn-primario">Salvar análise</button>
+            </div>
+          </form>
+
+          <form
+            class="admin-excluir"
+            method="post"
+            action="/admin/denuncias/<%= item.id %>/excluir"
+            data-confirm="Excluir definitivamente esta denúncia?"
+          >
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+            <button class="btn btn-texto-perigo">
+              <i class="fa-regular fa-trash-can"></i> Excluir denúncia
+            </button>
+          </form>
+        </div>
+      </details>
+    <% }) %>
+
+    <% if (!denuncias.length) { %>
+      <div class="vazio">
+        <i class="fa-solid fa-shield-heart"></i>
+        <h2>Nenhuma denúncia</h2>
+        <p>Não há conteúdo aguardando moderação.</p>
+      </div>
+    <% } %>
+  </div>
+</section>
+
+<%- include('../rodape') %>

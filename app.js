@@ -8,9 +8,15 @@ import routes from './routes/route.js';
 import AuthRoutes from './routes/AuthRoutes.js';
 import TccRoutes from './routes/TccRoutes.js';
 import IdeiaRoutes from './routes/IdeiaRoutes.js';
+import ComentarioRoutes from './routes/ComentarioRoutes.js';
 import AprendizagemRoutes from './routes/AprendizagemRoutes.js';
 import PainelRoutes from './routes/PainelRoutes.js';
-import AdminRoutes from './routes/AdminRoutes.js';
+import UsuarioRoutes from './routes/UsuarioRoutes.js';
+import CursoRoutes from './routes/CursoRoutes.js';
+import TurmaRoutes from './routes/TurmaRoutes.js';
+import ModuloRoutes from './routes/ModuloRoutes.js';
+import DenunciaRoutes from './routes/DenunciaRoutes.js';
+import ConfiguracaoRoutes from './routes/ConfiguracaoRoutes.js';
 import { csrf } from './middlewares/csrf.js';
 import { naoEncontrado, tratarErro } from './middlewares/erros.js';
 import { dominiosInstitucionais, loginRapidoAtivo } from './config/dominios.js';
@@ -46,7 +52,20 @@ app.use((req,res,next)=>{
 });
 app.use(csrf);
 app.use(routes);
-app.use(AuthRoutes,TccRoutes,IdeiaRoutes,AprendizagemRoutes,PainelRoutes,AdminRoutes);
+app.use(
+  AuthRoutes,
+  TccRoutes,
+  IdeiaRoutes,
+  ComentarioRoutes,
+  AprendizagemRoutes,
+  PainelRoutes,
+  UsuarioRoutes,
+  CursoRoutes,
+  TurmaRoutes,
+  ModuloRoutes,
+  DenunciaRoutes,
+  ConfiguracaoRoutes
+);
 app.use(naoEncontrado);
 app.use(tratarErro);
 export default app;

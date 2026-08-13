@@ -1,1 +1,27 @@
-<%- include('../partials/header') %><section class="page-hero"><div class="container"><span class="eyebrow">Novo trabalho</span><h1>Enviar TCC</h1><p>Salve como rascunho ou envie diretamente para avaliação.</p></div></section><section class="secao container narrow"><form class="form-card" method="post" enctype="multipart/form-data"><input type="hidden" name="_csrf" value="<%= csrfToken %>"><%- include('form') %><div class="form-acoes"><button class="btn btn-outline" name="acao" value="rascunho">Salvar rascunho</button><button class="btn btn-primario" name="acao" value="enviar">Enviar para avaliação</button></div></form></section><%- include('../partials/footer') %>
+<%- include('../cabecalho') %>
+
+<section class="page-hero">
+  <div class="container">
+    <span class="eyebrow">Novo trabalho</span>
+    <h1>Enviar TCC</h1>
+    <p>Salve como rascunho ou envie diretamente para avaliação.</p>
+  </div>
+</section>
+
+<section class="secao container narrow">
+  <form class="form-card" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <%- include('form') %>
+
+    <div class="form-acoes">
+      <button class="btn btn-outline" name="acao" value="rascunho">
+        Salvar rascunho
+      </button>
+      <button class="btn btn-primario" name="acao" value="enviar">
+        Enviar para avaliação
+      </button>
+    </div>
+  </form>
+</section>
+
+<%- include('../rodape') %>
