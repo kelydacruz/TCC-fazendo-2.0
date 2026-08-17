@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes das funções de normalização e autorização.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { lista, regexSegura, podeModerar, ehDono } from '../utils/texto.js';

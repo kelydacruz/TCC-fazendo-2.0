@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes do fluxo de avaliação dos TCCs.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { acoesAvaliacao, descricaoStatus, validarTransicao, visivelParaProfessor } from '../utils/fluxoTcc.js';

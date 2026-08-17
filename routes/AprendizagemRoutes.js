@@ -1,18 +1,19 @@
 import express from 'express';
-import AprendizagemController from '../controllers/AprendizagemController.js';
-import { autenticado } from '../middlewares/autorizacao.js';
-import { assinc } from '../middlewares/erros.js';
-
 const router = express.Router();
+
+// Funcionalidade exclusiva do AcervoTCC: trilha de aprendizagem e progresso do aluno.
+import AprendizagemController from '../controllers/AprendizagemController.js'
+import { autenticado } from '../middlewares/autorizacao.js'
+import { assinc } from '../middlewares/erros.js'
 const controle = new AprendizagemController();
-const caminhoBase = 'aprender';
+const caminhobase = 'aprender'
 
-router.get('/' + caminhoBase, assinc(controle.list));
-router.get('/' + caminhoBase + '/:id', assinc(controle.detalhes));
+router.get('/' + caminhobase, assinc(controle.list))
+router.get('/' + caminhobase + '/:id', assinc(controle.detalhes))
 router.post(
-  '/' + caminhoBase + '/:id/progresso',
-  autenticado,
-  assinc(controle.progresso)
-);
+    '/' + caminhobase + '/:id/progresso',
+    autenticado,
+    assinc(controle.progresso)
+)
 
-export default router;
+export default router

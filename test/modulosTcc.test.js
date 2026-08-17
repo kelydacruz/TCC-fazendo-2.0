@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes do conteúdo da trilha de aprendizagem.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import modulosTcc from '../data/modulosTcc.js';

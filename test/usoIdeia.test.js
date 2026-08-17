@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes dos dados de uso de uma ideia.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { dadosDeUsoIdeia, descricaoUsoIdeia } from '../utils/usoIdeia.js';

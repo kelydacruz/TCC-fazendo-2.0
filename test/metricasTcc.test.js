@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes das visualizações de TCCs publicados.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { registrarVisualizacao } from '../utils/metricasTcc.js';

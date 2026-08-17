@@ -1,25 +1,26 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: definição de senha por token temporário. %>
 
 <section class="secao container auth-wrap">
-  <div class="auth-card">
-    <h1>Defina uma nova senha</h1>
+    <div class="auth-card">
+        <h1>Defina uma nova senha</h1>
 
-    <form method="post">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <form method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-      <label>
-        Nova senha
-        <input type="password" name="senha" required minlength="8" autocomplete="new-password">
-      </label>
+            <label>
+                Nova senha
+                <input type="password" name="senha" required minlength="8" autocomplete="new-password">
+            </label>
 
-      <label>
-        Confirme a senha
-        <input type="password" name="confirmarSenha" required minlength="8" autocomplete="new-password">
-      </label>
+            <label>
+                Confirme a senha
+                <input type="password" name="confirmarSenha" required minlength="8" autocomplete="new-password">
+            </label>
 
-      <button class="btn btn-primario largura">Alterar senha</button>
-    </form>
-  </div>
+            <button class="btn btn-primario largura">Alterar senha</button>
+        </form>
+    </div>
 </section>
 
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

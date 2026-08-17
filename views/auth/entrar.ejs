@@ -1,51 +1,52 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: login institucional e acesso rápido de desenvolvimento. %>
 
 <section class="secao container auth-wrap">
-  <div class="auth-card">
-    <span class="marca-icone">
-      <i class="fa-solid fa-user-lock"></i>
-    </span>
-    <h1>Entre na sua conta</h1>
-    <p>Acesse com seu e-mail institucional.</p>
+    <div class="auth-card">
+        <span class="marca-icone">
+            <i class="fa-solid fa-user-lock"></i>
+        </span>
+        <h1>Entre na sua conta</h1>
+        <p>Acesse com seu e-mail institucional.</p>
 
-    <form method="post">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <form method="post">
+            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-      <label>
-        E-mail institucional
-        <input type="email" name="email" required autocomplete="email">
-      </label>
+            <label>
+                E-mail institucional
+                <input type="email" name="email" required autocomplete="email">
+            </label>
 
-      <label>
-        Senha
-        <input type="password" name="senha" required autocomplete="current-password">
-      </label>
+            <label>
+                Senha
+                <input type="password" name="senha" required autocomplete="current-password">
+            </label>
 
-      <button class="btn btn-primario largura">Entrar</button>
-    </form>
-
-    <a href="/recuperar-senha">Esqueci minha senha</a>
-    <hr>
-    <p>Ainda não tem uma conta? <a href="/cadastro"><strong>Cadastre-se</strong></a></p>
-
-    <% if (devQuickLogin) { %>
-      <div class="dev-login">
-        <span><i class="fa-solid fa-flask"></i> Acesso rápido de desenvolvimento</span>
-
-        <form method="post" action="/dev/entrar/aluno">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <button class="btn btn-outline largura">Entrar como aluno</button>
+            <button class="btn btn-primario largura">Entrar</button>
         </form>
 
-        <form method="post" action="/dev/entrar/professor">
-          <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-          <button class="btn btn-outline largura">Entrar como professor</button>
-        </form>
+        <a href="/recuperar-senha">Esqueci minha senha</a>
+        <hr>
+        <p>Ainda não tem uma conta? <a href="/cadastro"><strong>Cadastre-se</strong></a></p>
 
-        <small>Estes botões nunca são exibidos em produção.</small>
-      </div>
-    <% } %>
-  </div>
+        <% if (devQuickLogin) { %>
+            <div class="dev-login">
+                <span><i class="fa-solid fa-flask"></i> Acesso rápido de desenvolvimento</span>
+
+                <form method="post" action="/dev/entrar/aluno">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn btn-outline largura">Entrar como aluno</button>
+                </form>
+
+                <form method="post" action="/dev/entrar/professor">
+                    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                    <button class="btn btn-outline largura">Entrar como professor</button>
+                </form>
+
+                <small>Estes botões nunca são exibidos em produção.</small>
+            </div>
+        <% } %>
+    </div>
 </section>
 
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

@@ -1,126 +1,127 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: preservação de vínculos ao excluir cursos e turmas. %>
 <section class="page-hero admin-hero">
-  <div class="container">
-    <span class="eyebrow">Administração</span>
-    <h1>Cursos e turmas</h1>
-    <p>Cadastre primeiro os cursos da instituição e, depois, as turmas vinculadas a cada curso.</p>
-  </div>
+    <div class="container">
+        <span class="eyebrow">Administração</span>
+        <h1>Cursos e turmas</h1>
+        <p>Cadastre primeiro os cursos da instituição e, depois, as turmas vinculadas a cada curso.</p>
+    </div>
 </section>
-<%- include('nav') %>
+<%-include('nav.ejs')%>
 <% const cursosAtivos = cursos.filter(item=>item.ativo); %>
 <section class="secao container">
-  <div class="admin-duas-colunas">
-    <div>
-      <div class="secao-titulo">
+    <div class="admin-duas-colunas">
         <div>
-          <h2>Cursos</h2>
-          <p><%= cursos.length %> cadastrado<%= cursos.length===1?'':'s' %></p>
-        </div>
-        <details class="admin-criar">
-          <summary class="btn btn-primario"><i class="fa-solid fa-plus"></i> Novo curso</summary>
-          <form class="form-card" method="post" action="/admin/cursos">
-            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-            <label>Nome<input name="nome" placeholder="Ex.: Técnico em Informática" required></label>
-            <label>Sigla<input name="sigla" placeholder="Ex.: INFO" required maxlength="10"></label>
-            <label>Descrição<textarea name="descricao" rows="3" placeholder="Apresente brevemente a área de formação."></textarea></label>
-            <button class="btn btn-primario">Adicionar curso</button>
-          </form>
-        </details>
-      </div>
-      <div class="admin-lista">
-        <% cursos.forEach(item=>{ %>
-          <details class="admin-item">
-            <summary>
-              <div><strong><%= item.nome %></strong><small><%= item.sigla %></small></div>
-              <div class="admin-item-meta">
-                <span class="status <%= item.ativo?'disponivel':'' %>"><%= item.ativo?'Ativo':'Inativo' %></span>
-                <i class="fa-solid fa-chevron-down"></i>
-              </div>
-            </summary>
-            <div class="admin-item-conteudo">
-              <form method="post" action="/admin/cursos/<%= item.id %>">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <label>Nome<input name="nome" value="<%= item.nome %>" required></label>
-                <div class="form-grid">
-                  <label>Sigla<input name="sigla" value="<%= item.sigla %>" required></label>
-                  <label>Status<select name="ativo"><option value="true" <%= item.ativo?'selected':'' %>>Ativo</option><option value="false" <%= !item.ativo?'selected':'' %>>Inativo</option></select></label>
+            <div class="secao-titulo">
+                <div>
+                    <h2>Cursos</h2>
+                    <p><%= cursos.length %> cadastrado<%= cursos.length===1?'':'s' %></p>
                 </div>
-                <label>Descrição<textarea name="descricao" rows="3"><%= item.descricao||'' %></textarea></label>
-                <div class="form-acoes"><button class="btn btn-primario">Salvar</button></div>
-              </form>
-              <form class="admin-excluir" method="post" action="/admin/cursos/<%= item.id %>/excluir" data-confirm="Excluir este curso? Cursos com vínculos serão apenas desativados.">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button class="btn btn-texto-perigo"><i class="fa-regular fa-trash-can"></i> Excluir curso</button>
-              </form>
+                <details class="admin-criar">
+                    <summary class="btn btn-primario"><i class="fa-solid fa-plus"></i> Novo curso</summary>
+                    <form class="form-card" method="post" action="/admin/cursos">
+                        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                        <label>Nome<input name="nome" placeholder="Ex.: Técnico em Informática" required></label>
+                        <label>Sigla<input name="sigla" placeholder="Ex.: INFO" required maxlength="10"></label>
+                        <label>Descrição<textarea name="descricao" rows="3" placeholder="Apresente brevemente a área de formação."></textarea></label>
+                        <button class="btn btn-primario">Adicionar curso</button>
+                    </form>
+                </details>
             </div>
-          </details>
-        <% }) %>
-        <% if(!cursos.length){ %>
-          <div class="vazio admin-vazio">
-            <i class="fa-solid fa-graduation-cap"></i>
-            <h3>Nenhum curso cadastrado</h3>
-            <p>Use o botão <strong>Novo curso</strong> para começar a organizar a instituição.</p>
-          </div>
-        <% } %>
-      </div>
-    </div>
+            <div class="admin-lista">
+                <% cursos.forEach(item=>{ %>
+                    <details class="admin-item">
+                        <summary>
+                            <div><strong><%= item.nome %></strong><small><%= item.sigla %></small></div>
+                            <div class="admin-item-meta">
+                                <span class="status <%= item.ativo?'disponivel':'' %>"><%= item.ativo?'Ativo':'Inativo' %></span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </summary>
+                        <div class="admin-item-conteudo">
+                            <form method="post" action="/admin/cursos/<%= item.id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <label>Nome<input name="nome" value="<%= item.nome %>" required></label>
+                                <div class="form-grid">
+                                    <label>Sigla<input name="sigla" value="<%= item.sigla %>" required></label>
+                                    <label>Status<select name="ativo"><option value="true" <%= item.ativo?'selected':'' %>>Ativo</option><option value="false" <%= !item.ativo?'selected':'' %>>Inativo</option></select></label>
+                                </div>
+                                <label>Descrição<textarea name="descricao" rows="3"><%= item.descricao||'' %></textarea></label>
+                                <div class="form-acoes"><button class="btn btn-primario">Salvar</button></div>
+                            </form>
+                            <form class="admin-excluir" method="post" action="/admin/cursos/<%= item.id %>/excluir" data-confirm="Excluir este curso? Cursos com vínculos serão apenas desativados.">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button class="btn btn-texto-perigo"><i class="fa-regular fa-trash-can"></i> Excluir curso</button>
+                            </form>
+                        </div>
+                    </details>
+                <% }) %>
+                <% if(!cursos.length){ %>
+                    <div class="vazio admin-vazio">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <h3>Nenhum curso cadastrado</h3>
+                        <p>Use o botão <strong>Novo curso</strong> para começar a organizar a instituição.</p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
 
-    <div>
-      <div class="secao-titulo">
         <div>
-          <h2>Turmas</h2>
-          <p><%= turmas.length %> cadastrada<%= turmas.length===1?'':'s' %></p>
-        </div>
-        <% if(cursosAtivos.length){ %>
-          <details class="admin-criar">
-            <summary class="btn btn-primario"><i class="fa-solid fa-plus"></i> Nova turma</summary>
-            <form class="form-card" method="post" action="/admin/turmas">
-              <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-              <label>Nome<input name="nome" placeholder="Ex.: 3º ano A" required></label>
-              <label>Curso<select name="curso" required><option value="">Selecione o curso</option><% cursosAtivos.forEach(item=>{ %><option value="<%= item.id %>"><%= item.nome %></option><% }) %></select></label>
-              <label>Ano<input type="number" name="ano" value="<%= new Date().getFullYear() %>" min="2000" max="2100" required></label>
-              <button class="btn btn-primario">Adicionar turma</button>
-            </form>
-          </details>
-        <% } %>
-      </div>
-      <div class="admin-lista">
-        <% turmas.forEach(item=>{ %>
-          <details class="admin-item">
-            <summary>
-              <div><strong><%= item.nome %></strong><small><%= item.curso?.sigla %> · <%= item.ano %></small></div>
-              <div class="admin-item-meta">
-                <span class="status <%= item.ativa?'disponivel':'' %>"><%= item.ativa?'Ativa':'Inativa' %></span>
-                <i class="fa-solid fa-chevron-down"></i>
-              </div>
-            </summary>
-            <div class="admin-item-conteudo">
-              <form method="post" action="/admin/turmas/<%= item.id %>">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <label>Nome<input name="nome" value="<%= item.nome %>" required></label>
-                <div class="form-grid">
-                  <label>Curso<select name="curso"><% cursos.forEach(curso=>{ %><option value="<%= curso.id %>" <%= String(item.curso?._id)===curso.id?'selected':'' %>><%= curso.sigla %></option><% }) %></select></label>
-                  <label>Ano<input type="number" name="ano" value="<%= item.ano %>" min="2000" max="2100"></label>
+            <div class="secao-titulo">
+                <div>
+                    <h2>Turmas</h2>
+                    <p><%= turmas.length %> cadastrada<%= turmas.length===1?'':'s' %></p>
                 </div>
-                <label>Status<select name="ativa"><option value="true" <%= item.ativa?'selected':'' %>>Ativa</option><option value="false" <%= !item.ativa?'selected':'' %>>Inativa</option></select></label>
-                <div class="form-acoes"><button class="btn btn-primario">Salvar</button></div>
-              </form>
-              <form class="admin-excluir" method="post" action="/admin/turmas/<%= item.id %>/excluir" data-confirm="Excluir esta turma? Turmas com alunos ou TCCs serão apenas desativadas.">
-                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-                <button class="btn btn-texto-perigo"><i class="fa-regular fa-trash-can"></i> Excluir turma</button>
-              </form>
+                <% if(cursosAtivos.length){ %>
+                    <details class="admin-criar">
+                        <summary class="btn btn-primario"><i class="fa-solid fa-plus"></i> Nova turma</summary>
+                        <form class="form-card" method="post" action="/admin/turmas">
+                            <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                            <label>Nome<input name="nome" placeholder="Ex.: 3º ano A" required></label>
+                            <label>Curso<select name="curso" required><option value="">Selecione o curso</option><% cursosAtivos.forEach(item=>{ %><option value="<%= item.id %>"><%= item.nome %></option><% }) %></select></label>
+                            <label>Ano<input type="number" name="ano" value="<%= new Date().getFullYear() %>" min="2000" max="2100" required></label>
+                            <button class="btn btn-primario">Adicionar turma</button>
+                        </form>
+                    </details>
+                <% } %>
             </div>
-          </details>
-        <% }) %>
-        <% if(!turmas.length){ %>
-          <div class="vazio admin-vazio">
-            <i class="fa-solid fa-users-rectangle"></i>
-            <h3>Nenhuma turma cadastrada</h3>
-            <p><%= cursosAtivos.length?'Agora você já pode cadastrar a primeira turma.':'Cadastre um curso antes de adicionar as turmas.' %></p>
-          </div>
-        <% } %>
-      </div>
+            <div class="admin-lista">
+                <% turmas.forEach(item=>{ %>
+                    <details class="admin-item">
+                        <summary>
+                            <div><strong><%= item.nome %></strong><small><%= item.curso?.sigla %> · <%= item.ano %></small></div>
+                            <div class="admin-item-meta">
+                                <span class="status <%= item.ativa?'disponivel':'' %>"><%= item.ativa?'Ativa':'Inativa' %></span>
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                        </summary>
+                        <div class="admin-item-conteudo">
+                            <form method="post" action="/admin/turmas/<%= item.id %>">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <label>Nome<input name="nome" value="<%= item.nome %>" required></label>
+                                <div class="form-grid">
+                                    <label>Curso<select name="curso"><% cursos.forEach(curso=>{ %><option value="<%= curso.id %>" <%= String(item.curso?._id)===curso.id?'selected':'' %>><%= curso.sigla %></option><% }) %></select></label>
+                                    <label>Ano<input type="number" name="ano" value="<%= item.ano %>" min="2000" max="2100"></label>
+                                </div>
+                                <label>Status<select name="ativa"><option value="true" <%= item.ativa?'selected':'' %>>Ativa</option><option value="false" <%= !item.ativa?'selected':'' %>>Inativa</option></select></label>
+                                <div class="form-acoes"><button class="btn btn-primario">Salvar</button></div>
+                            </form>
+                            <form class="admin-excluir" method="post" action="/admin/turmas/<%= item.id %>/excluir" data-confirm="Excluir esta turma? Turmas com alunos ou TCCs serão apenas desativadas.">
+                                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                                <button class="btn btn-texto-perigo"><i class="fa-regular fa-trash-can"></i> Excluir turma</button>
+                            </form>
+                        </div>
+                    </details>
+                <% }) %>
+                <% if(!turmas.length){ %>
+                    <div class="vazio admin-vazio">
+                        <i class="fa-solid fa-users-rectangle"></i>
+                        <h3>Nenhuma turma cadastrada</h3>
+                        <p><%= cursosAtivos.length?'Agora você já pode cadastrar a primeira turma.':'Cadastre um curso antes de adicionar as turmas.' %></p>
+                    </div>
+                <% } %>
+            </div>
+        </div>
     </div>
-  </div>
 </section>
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

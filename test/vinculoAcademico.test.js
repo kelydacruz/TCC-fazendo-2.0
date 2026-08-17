@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes do vínculo entre aluno, curso e turma.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { alunoPodeEnviarPara, podeEnviarTcc, turmaPertenceAoCurso } from '../utils/vinculoAcademico.js';

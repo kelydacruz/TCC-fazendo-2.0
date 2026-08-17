@@ -1,68 +1,69 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: lista adequada ao aluno, professor ou administrador. %>
 
 <%
-  const ehAluno = usuarioAtual.perfil === 'aluno';
-  const ehProfessor = usuarioAtual.perfil === 'professor';
+    const ehAluno = usuarioAtual.perfil === 'aluno';
+    const ehProfessor = usuarioAtual.perfil === 'professor';
 %>
 
 <section class="page-hero">
-  <div class="container page-flex">
-    <div>
-      <span class="eyebrow"><%= ehAluno ? 'Acompanhamento' : ehProfessor ? 'Orientação' : 'Administração' %></span>
-      <h1><%= ehAluno ? 'Meus TCCs' : ehProfessor ? 'TCCs orientados' : 'Todos os TCCs' %></h1>
-      <p><%= ehAluno ? 'Consulte o status e as observações de cada trabalho.' : ehProfessor ? 'Avalie os trabalhos enviados pelos alunos sob sua orientação.' : 'Consulte e gerencie os trabalhos cadastrados na plataforma.' %></p>
-    </div>
+    <div class="container page-flex">
+        <div>
+            <span class="eyebrow"><%= ehAluno ? 'Acompanhamento' : ehProfessor ? 'Orientação' : 'Administração' %></span>
+            <h1><%= ehAluno ? 'Meus TCCs' : ehProfessor ? 'TCCs orientados' : 'Todos os TCCs' %></h1>
+            <p><%= ehAluno ? 'Consulte o status e as observações de cada trabalho.' : ehProfessor ? 'Avalie os trabalhos enviados pelos alunos sob sua orientação.' : 'Consulte e gerencie os trabalhos cadastrados na plataforma.' %></p>
+        </div>
 
-    <% if (ehAluno) { %>
-      <a class="btn btn-branco" href="/tcc/add">
-        <i class="fa-solid fa-plus"></i> Enviar TCC
-      </a>
-    <% } %>
-  </div>
+        <% if (ehAluno) { %>
+            <a class="btn btn-branco" href="/tcc/add">
+                <i class="fa-solid fa-plus"></i> Enviar TCC
+            </a>
+        <% } %>
+    </div>
 </section>
 
 <section class="secao container">
-  <div class="tabela-wrap">
-    <table>
-      <thead>
-        <tr>
-          <th>Título</th>
-          <th>Curso</th>
-          <th>Status</th>
-          <th>Atualizado</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% tccs.forEach(item => { %>
-          <tr>
-            <td>
-              <strong><%= item.titulo %></strong>
-              <small><%= item.alunoResponsavel?.nome %></small>
-            </td>
-            <td><%= item.curso?.sigla %></td>
-            <td><span class="status"><%= item.status %></span></td>
-            <td><%= new Date(item.updatedAt).toLocaleDateString('pt-BR') %></td>
-            <td>
-              <a class="btn btn-claro" href="/tcc/edt/<%= item.id %>">
-                <%= ehAluno ? 'Acompanhar' : ehProfessor ? 'Abrir avaliação' : 'Gerenciar' %>
-              </a>
-            </td>
-          </tr>
-        <% }) %>
-      </tbody>
-    </table>
-  </div>
-
-  <% if (!tccs.length) { %>
-    <div class="vazio">
-      <i class="fa-regular fa-file-lines"></i>
-      <h2><%= ehAluno ? 'Você ainda não enviou nenhum TCC' : ehProfessor ? 'Nenhum TCC aguardando sua orientação' : 'Nenhum TCC cadastrado' %></h2>
-      <% if (ehAluno) { %>
-        <a class="btn btn-primario" href="/tcc/add">Enviar o primeiro TCC</a>
-      <% } %>
+    <div class="tabela-wrap">
+        <table>
+            <thead>
+                <tr>
+                    <th>Título</th>
+                    <th>Curso</th>
+                    <th>Status</th>
+                    <th>Atualizado</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <% tccs.forEach(item => { %>
+                    <tr>
+                        <td>
+                            <strong><%= item.titulo %></strong>
+                            <small><%= item.alunoResponsavel?.nome %></small>
+                        </td>
+                        <td><%= item.curso?.sigla %></td>
+                        <td><span class="status"><%= item.status %></span></td>
+                        <td><%= new Date(item.updatedAt).toLocaleDateString('pt-BR') %></td>
+                        <td>
+                            <a class="btn btn-claro" href="/tcc/edt/<%= item.id %>">
+                                <%= ehAluno ? 'Acompanhar' : ehProfessor ? 'Abrir avaliação' : 'Gerenciar' %>
+                            </a>
+                        </td>
+                    </tr>
+                <% }) %>
+            </tbody>
+        </table>
     </div>
-  <% } %>
+
+    <% if (!tccs.length) { %>
+        <div class="vazio">
+            <i class="fa-regular fa-file-lines"></i>
+            <h2><%= ehAluno ? 'Você ainda não enviou nenhum TCC' : ehProfessor ? 'Nenhum TCC aguardando sua orientação' : 'Nenhum TCC cadastrado' %></h2>
+            <% if (ehAluno) { %>
+                <a class="btn btn-primario" href="/tcc/add">Enviar o primeiro TCC</a>
+            <% } %>
+        </div>
+    <% } %>
 </section>
 
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

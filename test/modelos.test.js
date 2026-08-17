@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes dos relacionamentos dos models.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import Usuario from '../models/usuario.js';

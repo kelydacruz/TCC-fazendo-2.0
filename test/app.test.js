@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes automatizados da aplicação.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import app from '../app.js';

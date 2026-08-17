@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes do fluxo de uso das ideias.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { acoesIdeiaAluno, alunoResponsavelPelaIdeia, transicaoAluno } from '../utils/fluxoIdeia.js';

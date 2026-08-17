@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes dos domínios institucionais.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { lerDominios, perfilDoEmail, loginRapidoAtivo } from '../config/dominios.js';

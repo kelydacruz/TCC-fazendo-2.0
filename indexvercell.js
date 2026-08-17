@@ -2,10 +2,7 @@ import 'dotenv/config';
 import app from './app.js';
 import { conectarBanco } from './config/conexao.js';
 
-const port = process.env.PORT || 3001;
-
+// Funcionalidade exclusiva do AcervoTCC: conecta o banco antes de atender pela Vercel.
 await conectarBanco();
-
-app.listen(port, () => console.log(`AcervoTCC disponível em http://localhost:${port}`));
 
 export default app;

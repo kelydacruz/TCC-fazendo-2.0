@@ -1,67 +1,68 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: conteúdo e progresso de cada módulo da trilha. %>
 
 <section class="page-hero">
-  <div class="container narrow">
-    <a class="voltar" href="/aprender">
-      <i class="fa-solid fa-arrow-left"></i> Voltar à trilha
-    </a>
-    <span class="eyebrow">Módulo <%= modulo.ordem %></span>
-    <h1><%= modulo.titulo %></h1>
-  </div>
+    <div class="container narrow">
+        <a class="voltar" href="/aprender">
+            <i class="fa-solid fa-arrow-left"></i> Voltar à trilha
+        </a>
+        <span class="eyebrow">Módulo <%= modulo.ordem %></span>
+        <h1><%= modulo.titulo %></h1>
+    </div>
 </section>
 
 <article class="secao container narrow conteudo-modulo">
-  <h2>Entenda</h2>
-  <% modulo.explicacao.split(/\n\n+/).forEach(paragrafo => { %>
-    <p><%= paragrafo %></p>
-  <% }) %>
-
-  <% if (modulo.exemplo) { %>
-    <div class="exemplo">
-      <h2>Exemplo prático</h2>
-      <% modulo.exemplo.split(/\n\n+/).forEach(paragrafo => { %>
+    <h2>Entenda</h2>
+    <% modulo.explicacao.split(/\n\n+/).forEach(paragrafo => { %>
         <p><%= paragrafo %></p>
-      <% }) %>
+    <% }) %>
+
+    <% if (modulo.exemplo) { %>
+        <div class="exemplo">
+            <h2>Exemplo prático</h2>
+            <% modulo.exemplo.split(/\n\n+/).forEach(paragrafo => { %>
+                <p><%= paragrafo %></p>
+            <% }) %>
+        </div>
+    <% } %>
+
+    <div class="dois-conteudos">
+        <section>
+            <h2><i class="fa-regular fa-lightbulb"></i> Dicas</h2>
+            <ul>
+                <% modulo.dicas.forEach(dica => { %>
+                    <li><%= dica %></li>
+                <% }) %>
+            </ul>
+        </section>
+
+        <section>
+            <h2><i class="fa-solid fa-triangle-exclamation"></i> Erros comuns</h2>
+            <ul>
+                <% modulo.errosComuns.forEach(erro => { %>
+                    <li><%= erro %></li>
+                <% }) %>
+            </ul>
+        </section>
     </div>
-  <% } %>
 
-  <div class="dois-conteudos">
-    <section>
-      <h2><i class="fa-regular fa-lightbulb"></i> Dicas</h2>
-      <ul>
-        <% modulo.dicas.forEach(dica => { %>
-          <li><%= dica %></li>
-        <% }) %>
-      </ul>
-    </section>
+    <div class="form-acoes form-acoes-modulo">
+        <% if (modulo.materialUrl) { %>
+            <a class="btn btn-outline" href="<%= modulo.materialUrl %>" download>
+                <i class="fa-solid fa-download"></i> Baixar material complementar
+            </a>
+        <% } %>
 
-    <section>
-      <h2><i class="fa-solid fa-triangle-exclamation"></i> Erros comuns</h2>
-      <ul>
-        <% modulo.errosComuns.forEach(erro => { %>
-          <li><%= erro %></li>
-        <% }) %>
-      </ul>
-    </section>
-  </div>
-
-  <div class="form-acoes form-acoes-modulo">
-    <% if (modulo.materialUrl) { %>
-      <a class="btn btn-outline" href="<%= modulo.materialUrl %>" download>
-        <i class="fa-solid fa-download"></i> Baixar material complementar
-      </a>
-    <% } %>
-
-    <% if (usuarioAtual) { %>
-      <form method="post" action="/aprender/<%= modulo.id %>/progresso">
-        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-        <button class="btn btn-primario">
-          <i class="fa-solid fa-check"></i>
-          <%= concluido ? 'Marcar como pendente' : 'Concluir módulo' %>
-        </button>
-      </form>
-    <% } %>
-  </div>
+        <% if (usuarioAtual) { %>
+            <form method="post" action="/aprender/<%= modulo.id %>/progresso">
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+                <button class="btn btn-primario">
+                    <i class="fa-solid fa-check"></i>
+                    <%= concluido ? 'Marcar como pendente' : 'Concluir módulo' %>
+                </button>
+            </form>
+        <% } %>
+    </div>
 </article>
 
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

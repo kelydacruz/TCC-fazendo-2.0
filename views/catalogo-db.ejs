@@ -1,124 +1,125 @@
-<%- include('cabecalho') %>
+<%-include('cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: catálogo público com pesquisa e filtros combinados. %>
 
 <section class="page-hero">
-  <div class="container">
-    <span class="eyebrow">Repositório de conhecimento</span>
-    <h1>Acervo de TCCs</h1>
-    <p>Encontre projetos, pesquisas e soluções desenvolvidos por nossos estudantes.</p>
+    <div class="container">
+        <span class="eyebrow">Repositório de conhecimento</span>
+        <h1>Acervo de TCCs</h1>
+        <p>Encontre projetos, pesquisas e soluções desenvolvidos por nossos estudantes.</p>
 
-    <form class="busca busca-interna">
-      <i class="fa-solid fa-magnifying-glass"></i>
-      <input
-        name="q"
-        value="<%= query.q || '' %>"
-        aria-label="Pesquisar TCCs"
-        placeholder="Título, autor, orientador ou palavra-chave"
-      >
-      <button>Pesquisar</button>
-    </form>
-  </div>
+        <form class="busca busca-interna">
+            <i class="fa-solid fa-magnifying-glass"></i>
+            <input
+                name="q"
+                value="<%= query.q || '' %>"
+                aria-label="Pesquisar TCCs"
+                placeholder="Título, autor, orientador ou palavra-chave"
+            >
+            <button>Pesquisar</button>
+        </form>
+    </div>
 </section>
 
 <section class="secao container catalogo-layout">
-  <aside class="filtro">
-    <form>
-      <input type="hidden" name="q" value="<%= query.q || '' %>">
-      <h2>Filtros</h2>
+    <aside class="filtro">
+        <form>
+            <input type="hidden" name="q" value="<%= query.q || '' %>">
+            <h2>Filtros</h2>
 
-      <label>
-        Curso
-        <select name="curso">
-          <option value="">Todos</option>
-          <% cursos.forEach(item => { %>
-            <option
-              value="<%= item.id %>"
-              <%= String(query.curso || '') === String(item.id) ? 'selected' : '' %>
-            ><%= item.nome %></option>
-          <% }) %>
-        </select>
-      </label>
+            <label>
+                Curso
+                <select name="curso">
+                    <option value="">Todos</option>
+                    <% cursos.forEach(item => { %>
+                        <option
+                            value="<%= item.id %>"
+                            <%= String(query.curso || '') === String(item.id) ? 'selected' : '' %>
+                        ><%= item.nome %></option>
+                    <% }) %>
+                </select>
+            </label>
 
-      <label>
-        Turma
-        <select name="turma">
-          <option value="">Todas</option>
-          <% turmas.forEach(item => { %>
-            <option
-              value="<%= item.id %>"
-              <%= String(query.turma || '') === String(item.id) ? 'selected' : '' %>
-            ><%= item.nome %> · <%= item.ano %></option>
-          <% }) %>
-        </select>
-      </label>
+            <label>
+                Turma
+                <select name="turma">
+                    <option value="">Todas</option>
+                    <% turmas.forEach(item => { %>
+                        <option
+                            value="<%= item.id %>"
+                            <%= String(query.turma || '') === String(item.id) ? 'selected' : '' %>
+                        ><%= item.nome %> · <%= item.ano %></option>
+                    <% }) %>
+                </select>
+            </label>
 
-      <label>
-        Ano
-        <input type="number" name="ano" value="<%= query.ano || '' %>" min="2000" max="2100">
-      </label>
+            <label>
+                Ano
+                <input type="number" name="ano" value="<%= query.ano || '' %>" min="2000" max="2100">
+            </label>
 
-      <label>
-        Área
-        <select name="area">
-          <option value="">Todas</option>
-          <% areas.forEach(item => { %>
-            <option value="<%= item %>" <%= query.area === item ? 'selected' : '' %>><%= item %></option>
-          <% }) %>
-        </select>
-      </label>
+            <label>
+                Área
+                <select name="area">
+                    <option value="">Todas</option>
+                    <% areas.forEach(item => { %>
+                        <option value="<%= item %>" <%= query.area === item ? 'selected' : '' %>><%= item %></option>
+                    <% }) %>
+                </select>
+            </label>
 
-      <label>
-        Orientador
-        <select name="orientador">
-          <option value="">Todos</option>
-          <% orientadores.forEach(item => { %>
-            <option
-              value="<%= item.id %>"
-              <%= String(query.orientador || '') === String(item.id) ? 'selected' : '' %>
-            ><%= item.nome %></option>
-          <% }) %>
-        </select>
-      </label>
+            <label>
+                Orientador
+                <select name="orientador">
+                    <option value="">Todos</option>
+                    <% orientadores.forEach(item => { %>
+                        <option
+                            value="<%= item.id %>"
+                            <%= String(query.orientador || '') === String(item.id) ? 'selected' : '' %>
+                        ><%= item.nome %></option>
+                    <% }) %>
+                </select>
+            </label>
 
-      <label>
-        Ordem
-        <select name="ordem">
-          <option value="recentes" <%= !query.ordem || query.ordem === 'recentes' ? 'selected' : '' %>>Mais recentes</option>
-          <option value="visualizados" <%= query.ordem === 'visualizados' ? 'selected' : '' %>>Mais visualizados</option>
-          <option value="az" <%= query.ordem === 'az' ? 'selected' : '' %>>Ordem alfabética</option>
-        </select>
-      </label>
+            <label>
+                Ordem
+                <select name="ordem">
+                    <option value="recentes" <%= !query.ordem || query.ordem === 'recentes' ? 'selected' : '' %>>Mais recentes</option>
+                    <option value="visualizados" <%= query.ordem === 'visualizados' ? 'selected' : '' %>>Mais visualizados</option>
+                    <option value="az" <%= query.ordem === 'az' ? 'selected' : '' %>>Ordem alfabética</option>
+                </select>
+            </label>
 
-      <button class="btn btn-primario largura">Aplicar filtros</button>
-      <a class="limpar" href="/tccs">Limpar todos</a>
-    </form>
-  </aside>
+            <button class="btn btn-primario largura">Aplicar filtros</button>
+            <a class="limpar" href="/tccs">Limpar todos</a>
+        </form>
+    </aside>
 
-  <div>
-    <div class="resultado-topo">
-      <p>
-        <strong><%= resultado.length %></strong>
-        <%= resultado.length === 1 ? 'trabalho encontrado' : 'trabalhos encontrados' %>
-      </p>
-    </div>
+    <div>
+        <div class="resultado-topo">
+            <p>
+                <strong><%= resultado.length %></strong>
+                <%= resultado.length === 1 ? 'trabalho encontrado' : 'trabalhos encontrados' %>
+            </p>
+        </div>
 
-    <div class="cards-grid cards-2">
-      <% resultado.forEach(item => { %>
-        <%- include('partials/tcc-card-db', { item }) %>
-      <% }) %>
-    </div>
+        <div class="cards-grid cards-2">
+            <% resultado.forEach(item => { %>
+                <%-include('partials/tcc-card-db.ejs', { item })%>
+            <% }) %>
+        </div>
 
-    <% if (!resultado.length) { %>
-      <% const temFiltro = Object.values(query).some(Boolean); %>
-      <div class="vazio">
-        <i class="fa-regular fa-folder-open"></i>
-        <h2><%= temFiltro ? 'Nenhum trabalho encontrado' : 'O acervo ainda está vazio' %></h2>
-        <p><%= temFiltro ? 'Tente limpar os filtros ou pesquisar por outros termos.' : 'Somente TCCs avaliados e liberados pelo professor orientador aparecerão aqui.' %></p>
-        <% if (temFiltro) { %>
-          <a class="btn btn-primario" href="/tccs">Limpar busca</a>
+        <% if (!resultado.length) { %>
+            <% const temFiltro = Object.values(query).some(Boolean); %>
+            <div class="vazio">
+                <i class="fa-regular fa-folder-open"></i>
+                <h2><%= temFiltro ? 'Nenhum trabalho encontrado' : 'O acervo ainda está vazio' %></h2>
+                <p><%= temFiltro ? 'Tente limpar os filtros ou pesquisar por outros termos.' : 'Somente TCCs avaliados e liberados pelo professor orientador aparecerão aqui.' %></p>
+                <% if (temFiltro) { %>
+                    <a class="btn btn-primario" href="/tccs">Limpar busca</a>
+                <% } %>
+            </div>
         <% } %>
-      </div>
-    <% } %>
-  </div>
+    </div>
 </section>
 
-<%- include('rodape') %>
+<%-include('rodape.ejs')%>

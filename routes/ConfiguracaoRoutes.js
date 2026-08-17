@@ -1,14 +1,15 @@
 import express from 'express';
-import ConfiguracaoController from '../controllers/ConfiguracaoController.js';
-import { autenticado, perfisPermitidos } from '../middlewares/autorizacao.js';
-import { assinc } from '../middlewares/erros.js';
-
 const router = express.Router();
+
+// Funcionalidade exclusiva do AcervoTCC: configurações institucionais administráveis.
+import ConfiguracaoController from '../controllers/ConfiguracaoController.js'
+import { autenticado, perfisPermitidos } from '../middlewares/autorizacao.js'
+import { assinc } from '../middlewares/erros.js'
 const controle = new ConfiguracaoController();
-const caminhoBase = 'admin/configuracao';
+const caminhobase = 'admin/configuracao'
 
 router.use('/admin', autenticado, perfisPermitidos('administrador'));
-router.get('/' + caminhoBase, assinc(controle.openEdt));
-router.post('/' + caminhoBase, assinc(controle.edt));
+router.get('/' + caminhobase, assinc(controle.openEdt))
+router.post('/' + caminhobase, assinc(controle.edt))
 
-export default router;
+export default router

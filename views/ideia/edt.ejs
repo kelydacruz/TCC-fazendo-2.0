@@ -1,106 +1,107 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: edição autorizada de uma ideia disponível. %>
 
 <section class="page-hero">
-  <div class="container">
-    <span class="eyebrow"><%= ['professor', 'administrador'].includes(usuarioAtual.perfil) ? 'Moderação' : 'Sua ideia' %></span>
-    <h1>Editar ideia</h1>
-    <p>Atualize os dados da proposta e acompanhe sua utilização.</p>
-  </div>
+    <div class="container">
+        <span class="eyebrow"><%= ['professor', 'administrador'].includes(usuarioAtual.perfil) ? 'Moderação' : 'Sua ideia' %></span>
+        <h1>Editar ideia</h1>
+        <p>Atualize os dados da proposta e acompanhe sua utilização.</p>
+    </div>
 </section>
 
 <section class="secao container narrow">
-  <form class="form-card" method="post">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <form class="form-card" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <label>
-      Título
-      <input name="titulo" required maxlength="200" value="<%= ideia.titulo %>">
-    </label>
+        <label>
+            Título
+            <input name="titulo" required maxlength="200" value="<%= ideia.titulo %>">
+        </label>
 
-    <label>
-      Descrição
-      <textarea name="descricao" rows="6" required maxlength="5000"><%= ideia.descricao %></textarea>
-    </label>
+        <label>
+            Descrição
+            <textarea name="descricao" rows="6" required maxlength="5000"><%= ideia.descricao %></textarea>
+        </label>
 
-    <label>
-      Problema
-      <textarea name="problema" rows="4" required maxlength="3000"><%= ideia.problema %></textarea>
-    </label>
-
-    <div class="form-grid">
-      <label>
-        Curso
-        <select name="curso" required>
-          <% cursos.forEach(item => { %>
-            <option value="<%= item.id %>" <%= String(ideia.curso) === item.id ? 'selected' : '' %>><%= item.nome %></option>
-          <% }) %>
-        </select>
-      </label>
-
-      <label>
-        Área
-        <input name="area" required value="<%= ideia.area %>">
-      </label>
-
-      <label>
-        Dificuldade
-        <select name="dificuldade">
-          <% ['Iniciante', 'Intermediária', 'Avançada'].forEach(item => { %>
-            <option <%= ideia.dificuldade === item ? 'selected' : '' %>><%= item %></option>
-          <% }) %>
-        </select>
-      </label>
-
-      <label>
-        Conhecimentos
-        <input name="conhecimentos" value="<%= ideia.conhecimentos.join(', ') %>">
-      </label>
-    </div>
-
-    <% if (['professor', 'administrador'].includes(usuarioAtual.perfil)) { %>
-      <div class="subsecao moderacao-ideia">
-        <h2>Moderação institucional</h2>
-        <p>Os alunos escolhem as ideias e atualizam o próprio andamento. Professores e administradores podem colocar a proposta em análise, devolvê-la como disponível ou arquivá-la.</p>
+        <label>
+            Problema
+            <textarea name="problema" rows="4" required maxlength="3000"><%= ideia.problema %></textarea>
+        </label>
 
         <div class="form-grid">
-          <label>
-            Status
-            <select name="status">
-              <% statusModeracao.forEach(item => { %>
-                <option value="<%= item %>" <%= ideia.status === item ? 'selected' : '' %>><%= item %></option>
-              <% }) %>
-            </select>
-            <small>Status de uso como “Reservada” e “Em desenvolvimento” são controlados pelo aluno responsável.</small>
-          </label>
-
-          <% if (ideia.status === 'Utilizada') { %>
             <label>
-              TCC desenvolvido a partir da ideia
-              <select name="tccVinculado">
-                <option value="">Nenhum TCC vinculado</option>
-                <% tccs.forEach(item => { %>
-                  <option value="<%= item.id %>" <%= String(ideia.tccVinculado || '') === item.id ? 'selected' : '' %>><%= item.titulo %></option>
-                <% }) %>
-              </select>
-              <small>Depois que o aluno marcar como utilizada, vincule o TCC publicado correspondente.</small>
+                Curso
+                <select name="curso" required>
+                    <% cursos.forEach(item => { %>
+                        <option value="<%= item.id %>" <%= String(ideia.curso) === item.id ? 'selected' : '' %>><%= item.nome %></option>
+                    <% }) %>
+                </select>
             </label>
-          <% } %>
+
+            <label>
+                Área
+                <input name="area" required value="<%= ideia.area %>">
+            </label>
+
+            <label>
+                Dificuldade
+                <select name="dificuldade">
+                    <% ['Iniciante', 'Intermediária', 'Avançada'].forEach(item => { %>
+                        <option <%= ideia.dificuldade === item ? 'selected' : '' %>><%= item %></option>
+                    <% }) %>
+                </select>
+            </label>
+
+            <label>
+                Conhecimentos
+                <input name="conhecimentos" value="<%= ideia.conhecimentos.join(', ') %>">
+            </label>
         </div>
-      </div>
-    <% } %>
 
-    <button class="btn btn-primario">Salvar alterações</button>
-  </form>
+        <% if (['professor', 'administrador'].includes(usuarioAtual.perfil)) { %>
+            <div class="subsecao moderacao-ideia">
+                <h2>Moderação institucional</h2>
+                <p>Os alunos escolhem as ideias e atualizam o próprio andamento. Professores e administradores podem colocar a proposta em análise, devolvê-la como disponível ou arquivá-la.</p>
 
-  <form
-    class="form-perigo"
-    method="post"
-    action="/ideias/<%= ideia.id %>/excluir"
-    data-confirm="Excluir esta ideia e seus comentários?"
-  >
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-    <button class="btn btn-perigo">Excluir ideia</button>
-  </form>
+                <div class="form-grid">
+                    <label>
+                        Status
+                        <select name="status">
+                            <% statusModeracao.forEach(item => { %>
+                                <option value="<%= item %>" <%= ideia.status === item ? 'selected' : '' %>><%= item %></option>
+                            <% }) %>
+                        </select>
+                        <small>Status de uso como “Reservada” e “Em desenvolvimento” são controlados pelo aluno responsável.</small>
+                    </label>
+
+                    <% if (ideia.status === 'Utilizada') { %>
+                        <label>
+                            TCC desenvolvido a partir da ideia
+                            <select name="tccVinculado">
+                                <option value="">Nenhum TCC vinculado</option>
+                                <% tccs.forEach(item => { %>
+                                    <option value="<%= item.id %>" <%= String(ideia.tccVinculado || '') === item.id ? 'selected' : '' %>><%= item.titulo %></option>
+                                <% }) %>
+                            </select>
+                            <small>Depois que o aluno marcar como utilizada, vincule o TCC publicado correspondente.</small>
+                        </label>
+                    <% } %>
+                </div>
+            </div>
+        <% } %>
+
+        <button class="btn btn-primario">Salvar alterações</button>
+    </form>
+
+    <form
+        class="form-perigo"
+        method="post"
+        action="/ideias/<%= ideia.id %>/excluir"
+        data-confirm="Excluir esta ideia e seus comentários?"
+    >
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+        <button class="btn btn-perigo">Excluir ideia</button>
+    </form>
 </section>
 
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

@@ -1,64 +1,65 @@
-<%- include('../cabecalho') %>
+<%-include('../cabecalho.ejs')%>
+<%# Funcionalidade exclusiva do AcervoTCC: publicação de uma ideia por usuário autenticado. %>
 
 <section class="page-hero">
-  <div class="container">
-    <span class="eyebrow">Compartilhe um desafio</span>
-    <h1>Publicar ideia</h1>
-  </div>
+    <div class="container">
+        <span class="eyebrow">Compartilhe um desafio</span>
+        <h1>Publicar ideia</h1>
+    </div>
 </section>
 
 <section class="secao container narrow">
-  <form class="form-card" method="post">
-    <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+    <form class="form-card" method="post">
+        <input type="hidden" name="_csrf" value="<%= csrfToken %>">
 
-    <label>
-      Título
-      <input name="titulo" required maxlength="200">
-    </label>
+        <label>
+            Título
+            <input name="titulo" required maxlength="200">
+        </label>
 
-    <label>
-      Descrição
-      <textarea name="descricao" rows="6" required maxlength="5000"></textarea>
-    </label>
+        <label>
+            Descrição
+            <textarea name="descricao" rows="6" required maxlength="5000"></textarea>
+        </label>
 
-    <label>
-      Problema que pretende resolver
-      <textarea name="problema" rows="4" required maxlength="3000"></textarea>
-    </label>
+        <label>
+            Problema que pretende resolver
+            <textarea name="problema" rows="4" required maxlength="3000"></textarea>
+        </label>
 
-    <div class="form-grid">
-      <label>
-        Curso
-        <select name="curso" required>
-          <option value="">Selecione</option>
-          <% cursos.forEach(curso => { %>
-            <option value="<%= curso.id %>"><%= curso.nome %></option>
-          <% }) %>
-        </select>
-      </label>
+        <div class="form-grid">
+            <label>
+                Curso
+                <select name="curso" required>
+                    <option value="">Selecione</option>
+                    <% cursos.forEach(curso => { %>
+                        <option value="<%= curso.id %>"><%= curso.nome %></option>
+                    <% }) %>
+                </select>
+            </label>
 
-      <label>
-        Área
-        <input name="area" required>
-      </label>
+            <label>
+                Área
+                <input name="area" required>
+            </label>
 
-      <label>
-        Dificuldade
-        <select name="dificuldade" required>
-          <option>Iniciante</option>
-          <option>Intermediária</option>
-          <option>Avançada</option>
-        </select>
-      </label>
+            <label>
+                Dificuldade
+                <select name="dificuldade" required>
+                    <option>Iniciante</option>
+                    <option>Intermediária</option>
+                    <option>Avançada</option>
+                </select>
+            </label>
 
-      <label>
-        Conhecimentos recomendados
-        <input name="conhecimentos" placeholder="Ex.: JavaScript, UX, Banco de dados">
-      </label>
-    </div>
+            <label>
+                Conhecimentos recomendados
+                <input name="conhecimentos" placeholder="Ex.: JavaScript, UX, Banco de dados">
+            </label>
+        </div>
 
-    <button class="btn btn-primario">Publicar ideia</button>
-  </form>
+        <button class="btn btn-primario">Publicar ideia</button>
+    </form>
 </section>
 
-<%- include('../rodape') %>
+<%-include('../rodape.ejs')%>

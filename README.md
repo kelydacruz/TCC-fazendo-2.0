@@ -34,16 +34,18 @@ O passo a passo completo para configurar o ambiente e validar os acessos de alun
 
 ## Padrão de organização
 
-O projeto foi reformulado para se aproximar da forma de código utilizada em `DAWII-Adocao`, `vercellKely` e `Prova-k`:
+O projeto foi reformulado seguindo diretamente a forma de código utilizada em `DAWII-Adocao`, `Prova-k`, `Esporte` e `vercellKely`, com prioridade para o `DAWII-Adocao`:
 
-- controllers em classes, com `constructor(caminhoBase)` e métodos com nomes como `openAdd`, `add`, `list`, `openEdt`, `edt` e `del`;
+- controllers em classes no formato `export default class NomeController{`, com `constructor(caminhoBase='pasta/'){` e métodos atribuídos dentro do construtor;
+- métodos com os mesmos nomes usados nos projetos: `openAdd`, `add`, `list`, `find`, `openEdt`, `edt` e `del`;
+- arquivos de rota com as variáveis `controle` e `caminhobase`, seguindo a mesma composição de endereços;
 - controllers e arquivos de rotas separados por entidade, inclusive na área administrativa;
 - schemas Mongoose em arquivos próprios dentro de `models`;
-- páginas EJS separadas por módulo, com `views/cabecalho.ejs` e `views/rodape.ejs` compartilhados;
-- código escrito em blocos legíveis, evitando controllers, rotas e páginas inteiras em uma única linha;
-- entrada comum em `index.js` e entrada serverless em `api/index.js` para a Vercel.
+- páginas EJS separadas por módulo, com inclusões no formato `<%-include('../cabecalho.ejs')%>` e `<%-include('../rodape.ejs')%>`;
+- indentação em quatro espaços e nomes em português, preservando o estilo visual dos arquivos de referência;
+- entrada comum em `index.js`, entrada intermediária em `indexvercell.js` e função em `api/index.js`, como nos projetos publicados na Vercel.
 
-Recursos que não existem nos projetos de referência — autenticação institucional, permissões, CSRF, upload seguro, fluxo de revisão, favoritos e testes — permanecem em pastas próprias porque são necessários ao AcervoTCC. O CSS continua separado em `public/css` e não foi alterado nesta reformulação.
+Recursos que não existem nos projetos de referência — autenticação institucional, permissões, CSRF, upload seguro, fluxo de revisão, favoritos e testes — permanecem porque são necessários ao AcervoTCC. Cada um desses arquivos ou blocos possui imediatamente acima um comentário iniciado por `Funcionalidade exclusiva do AcervoTCC:`. O CSS continua separado em `public/css` e não foi alterado nesta reformulação.
 
 ## Estrutura
 

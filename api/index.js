@@ -1,5 +1,3 @@
-import 'dotenv/config';
-import app from '../app.js';
-import { conectarBanco } from '../config/conexao.js';
-await conectarBanco();
+import app from '../indexvercell.js';
+
 export default app;

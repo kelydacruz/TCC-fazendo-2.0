@@ -1,3 +1,4 @@
+// Funcionalidade exclusiva do AcervoTCC: testes das permissões exibidas nas views.
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import ejs from 'ejs';
