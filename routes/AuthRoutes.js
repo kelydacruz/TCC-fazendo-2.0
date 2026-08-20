@@ -18,7 +18,7 @@ router.get('/recuperar-senha', visitante, controle.openRecuperar)
 router.post('/recuperar-senha', visitante, limite, assinc(controle.solicitarRecuperacao))
 router.get('/nova-senha/:token', visitante, assinc(controle.openNovaSenha))
 router.post('/nova-senha/:token', visitante, limite, assinc(controle.novaSenha))
-router.post('/dev/entrar/:perfil', visitante, limite, assinc(controle.entrarDesenvolvimento))
+router.post('/dev/entrar/:conta', visitante, limite, assinc(controle.entrarDesenvolvimento))
 router.post('/sair', controle.sair)
 
 export default router

@@ -25,10 +25,39 @@ export function perfilDoEmail(email) {
     return null;
 }
 
-export function emailDeTeste(perfil) {
+// Funcionalidade exclusiva do AcervoTCC: cria contas rápidas diferentes para os testes locais.
+export function contaDeTeste(chave) {
+    const contas = {
+        aluno: {
+            nome: 'Aluno de Teste 1',
+            perfil: 'aluno',
+            prefixo: 'aluno.teste'
+        },
+        'aluno-2': {
+            nome: 'Aluno de Teste 2',
+            perfil: 'aluno',
+            prefixo: 'aluno2.teste'
+        },
+        professor: {
+            nome: 'Professor de Teste',
+            perfil: 'professor',
+            prefixo: 'professor.teste'
+        }
+    };
+    const conta = contas[chave];
+    if (!conta) return null;
+
     const dominios = dominiosInstitucionais();
-    const dominio = dominios[perfil]?.[0] || `${perfil}.teste.invalid`;
-    return `${perfil}.teste@${dominio}`;
+    const dominio = dominios[conta.perfil]?.[0] || `${conta.perfil}.teste.invalid`;
+    return {
+        nome: conta.nome,
+        perfil: conta.perfil,
+        email: `${conta.prefixo}@${dominio}`
+    };
+}
+
+export function emailDeTeste(perfil) {
+    return contaDeTeste(perfil)?.email;
 }
 
 export function loginRapidoAtivo() {

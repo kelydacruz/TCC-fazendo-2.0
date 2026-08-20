@@ -5,7 +5,7 @@ import Usuario from '../models/usuario.js';
 import Configuracao from '../models/configuracao.js';
 import { enviarEmail } from '../config/email.js';
 import {
-    emailDeTeste,
+    contaDeTeste,
     loginRapidoAtivo,
     perfilDoEmail
 } from '../config/dominios.js';
@@ -90,18 +90,17 @@ export default class AuthController{
                 );
             }
 
-            const perfil = req.params.perfil;
-            if (!['aluno', 'professor'].includes(perfil)) {
+            const conta = contaDeTeste(req.params.conta);
+            if (!conta) {
                 return res.status(404).render('404', { title: 'Página não encontrada' });
             }
 
-            const email = emailDeTeste(perfil);
             const usuario = await Usuario.findOneAndUpdate(
-                { email },
+                { email: conta.email },
                 {
                     $set: {
-                        nome: perfil === 'aluno' ? 'Aluno de Teste' : 'Professor de Teste',
-                        perfil,
+                        nome: conta.nome,
+                        perfil: conta.perfil,
                         aprovado: true,
                         emailConfirmado: true,
                         ativo: true
